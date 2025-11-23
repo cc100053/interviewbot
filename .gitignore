@@ -1,0 +1,21 @@
+# --- Python/FastAPI ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# Environment Variables (SECRETS!)
+.env
+
+# --- Database ---
+# Exclude the local SQLite database file
+data/*.db
+*.db
+
+# --- OS Generated Files ---
+.DS_Store
+Thumbs.db

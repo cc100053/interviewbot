@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+pydantic
+python-dotenv
+bcrypt
+pyjwt
+azure-cosmos
+azure-cognitiveservices-speech
+google-generativeai
+python-multipart

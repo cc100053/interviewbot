@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ポケメン | AI 面接トレーナー</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="static/styles.css?v=2" />
+</head>
+
+<body class="min-h-screen">
+  <section id="login-view" class="view-card active">
+    <div class="min-h-screen w-full flex items-center justify-center p-4 sm:p-8">
+      <div
+        class="glass-panel w-full max-w-6xl rounded-3xl overflow-hidden shadow-2xl flex flex-col lg:flex-row min-h-[600px]">
+        <!-- Hero Section -->
+        <div class="lg:w-1/2 p-12 flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-indigo-600/20 to-purple-600/20 z-0"></div>
+          <div class="relative z-10">
+            <div class="mb-12">
+              <img src="static/photo/logo2.png" alt="ポケメン ロゴ" class="h-12 w-auto drop-shadow-lg" />
+            </div>
+
+            <h2 class="text-4xl sm:text-5xl font-bold leading-tight mb-6 text-slate-900">
+              AI面接で<br><span class="text-gradient">未来を掴む</span>
+            </h2>
+            <p class="text-lg text-indigo-700 mb-10 leading-relaxed opacity-90">
+              最先端のAI技術が、あなたの専属トレーナーに。<br>
+              いつでもどこでも、本番さながらの面接練習を。
+            </p>
+
+            <div class="space-y-8">
+              <div class="flex items-start gap-4">
+                <div class="p-2 rounded-lg bg-white/10 backdrop-blur-sm">
+                  <i data-lucide="zap" class="w-6 h-6 text-yellow-300"></i>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-slate-900 text-lg">リアルタイム分析</h3>
+                  <p class="text-sm text-indigo-600 mt-1">回答の論理構成や具体性を即座にスコアリング</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div class="p-2 rounded-lg bg-white/10 backdrop-blur-sm">
+                  <i data-lucide="mic" class="w-6 h-6 text-pink-300"></i>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-slate-900 text-lg">音声対話モード</h3>
+                  <p class="text-sm text-indigo-600 mt-1">本番のような緊張感で、スピーキング力を強化</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="relative z-10 mt-12 text-sm text-indigo-300/60">
+            © 2025 ポケメン. All rights reserved.
+          </div>
+        </div>
+
+        <!-- Auth Form Section -->
+        <div
+          class="lg:w-1/2 bg-white/80 backdrop-blur-xl p-8 sm:p-16 flex flex-col justify-center border-l border-slate-200">
+          <div class="max-w-md mx-auto w-full">
+            <h2 class="text-3xl font-bold text-slate-900 mb-2">Welcome Back</h2>
+            <p class="text-slate-500 mb-8">アカウント情報を入力してログインしてください</p>
+
+            <div class="flex justify-center mb-8">
+              <div class="nav-pill-container w-full">
+                <button id="switch-to-login" type="button" class="tab-button active-tab w-1/2">ログイン</button>
+                <button id="switch-to-signup" type="button" class="tab-button w-1/2">新規登録</button>
+              </div>
+            </div>
+
+            <form id="login-form" method="post" class="space-y-5">
+              <div>
+                <label for="login-userid" class="block text-sm font-medium text-slate-600 mb-1.5">ユーザーID</label>
+                <input id="login-userid" name="userId" type="text" required class="input-field"
+                  placeholder="your_username" />
+              </div>
+              <div>
+                <label for="login-password" class="block text-sm font-medium text-slate-600 mb-1.5">パスワード</label>
+                <input id="login-password" name="password" type="password" required minlength="8" class="input-field"
+                  placeholder="••••••••" />
+              </div>
+              <div id="login-error-alert"
+                class="hidden p-4 mb-4 text-sm text-red-200 rounded-lg bg-red-900/30 border border-red-500/30"
+                role="alert">
+                <span class="font-medium">ログイン失敗:</span>
+                <span id="login-error-text">IDまたはパスワードが違います。</span>
+              </div>
+              <button type="submit" class="primary-button w-full mt-2">
+                ログイン <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+              </button>
+              <p class="text-center text-sm text-slate-500 mt-8">
+                アカウントをお持ちでないですか？
+                <button type="button" id="go-to-signup"
+                  class="font-medium text-indigo-400 hover:text-indigo-300 transition-colors">
+                  新規作成
+                </button>
+              </p>
+            </form>
+
+            <form id="signup-form" method="post" class="space-y-5 hidden">
+              <div>
+                <label for="signup-userid" class="block text-sm font-medium text-slate-600 mb-1.5">ユーザーID</label>
+                <input id="signup-userid" name="userId" type="text" required class="input-field"
+                  placeholder="your_username" />
+              </div>
+              <div>
+                <label for="signup-password" class="block text-sm font-medium text-slate-600 mb-1.5">パスワード
+                  (8文字以上)</label>
+                <input id="signup-password" name="password" type="password" required minlength="8" class="input-field"
+                  placeholder="••••••••" />
+              </div>
+              <div id="signup-error-alert"
+                class="hidden p-4 mb-4 text-sm text-red-200 rounded-lg bg-red-900/30 border border-red-500/30"
+                role="alert">
+                <span class="font-medium">登録失敗:</span>
+                <span id="signup-error-text">このIDは既に使用されています。</span>
+              </div>
+              <button type="submit" class="primary-button w-full mt-2">アカウント作成</button>
+              <p class="text-center text-sm text-slate-500 mt-6">
+                すでにアカウントをお持ちですか？
+                <button type="button" id="go-to-login"
+                  class="font-medium text-indigo-400 hover:text-indigo-300 transition-colors">ログイン</button>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="app-root" class="max-w-6xl mx-auto py-4 px-4 sm:px-6 lg:px-8 hidden min-h-screen flex flex-col">
+    <header id="app-header"
+      class="glass-panel sticky top-4 z-40 mb-6 rounded-2xl px-6 py-4 flex items-center justify-between">
+      <a href="#" id="logo-link" class="inline-flex items-center gap-3 hover:opacity-80 transition-opacity">
+        <img src="static/photo/logo1.png" alt="ポケメン ロゴ" class="h-8 w-auto" />
+      </a>
+      <div class="flex items-center gap-4">
+        <div id="status-indicator"
+          class="hidden flex items-center gap-2 bg-slate-100 border border-slate-200 rounded-full px-3 py-1.5 text-xs text-slate-600">
+          <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+          <span id="status-text">処理中...</span>
+        </div>
+        <button id="open-menu-btn" type="button"
+          class="hidden inline-flex items-center justify-center rounded-full p-0.5 hover:ring-2 hover:ring-indigo-500/50 transition-all">
+          <span class="sr-only">メニューを開く</span>
+          <img id="header-profile-avatar" src="static/photo/default.png" alt="メニュー"
+            class="w-10 h-10 rounded-full border-2 border-slate-700 object-cover" />
+        </button>
+      </div>
+    </header>
+
+    <main id="app-container" class="flex-1 relative">
+      <div id="app-shell" class="hidden space-y-6">
+        <!-- Navigation -->
+        <nav class="flex justify-center sticky top-24 z-30 pointer-events-none">
+          <div class="nav-pill-container pointer-events-auto shadow-lg backdrop-blur-md">
+            <button class="tab-nav-button active" data-target-view="top-page-view">
+              <i data-lucide="layout-dashboard" class="w-4 h-4 inline-block mr-1.5 mb-0.5"></i>ホーム
+            </button>
+            <button class="tab-nav-button" data-target-view="training-view">
+              <i data-lucide="swords" class="w-4 h-4 inline-block mr-1.5 mb-0.5"></i>トレーニング
+            </button>
+            <button class="tab-nav-button" data-target-view="history-view">
+              <i data-lucide="history" class="w-4 h-4 inline-block mr-1.5 mb-0.5"></i>履歴
+            </button>
+          </div>
+        </nav>
+
+        <div id="main-content" class="space-y-6 pb-12">
+          <!-- Dashboard View -->
+          <section id="top-page-view" class="content-view active">
+            <div class="space-y-6">
+              <!-- Stats Grid -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 flex items-center justify-between">
+                  <div>
+                    <p class="text-sm font-medium text-slate-500">総練習回数</p>
+                    <p id="stat-sessions" class="text-3xl font-bold text-slate-900 mt-1">24</p>
+                  </div>
+                  <div class="w-12 h-12 flex items-center justify-center bg-indigo-500/20 text-indigo-400 rounded-xl">
+                    <i id="icon-sessions" data-lucide="target" class="w-6 h-6"></i>
+                  </div>
+                </div>
+
+                <div class="glass-card p-6 flex items-center justify-between">
+                  <div>
+                    <p class="text-sm font-medium text-slate-500">平均スコア</p>
+                    <p id="stat-avg-score" class="text-3xl font-bold text-slate-900 mt-1">85</p>
+                  </div>
+                  <div class="w-12 h-12 flex items-center justify-center bg-purple-500/20 text-purple-400 rounded-xl">
+                    <i id="icon-score" data-lucide="trending-up" class="w-6 h-6"></i>
+                  </div>
+                </div>
+
+                <div class="glass-card p-6 flex items-center justify-between">
+                  <div>
+                    <p class="text-sm font-medium text-slate-500">練習時間</p>
+                    <p id="stat-total-time" class="text-3xl font-bold text-slate-900 mt-1">12h</p>
+                  </div>
+                  <div class="w-12 h-12 flex items-center justify-center bg-pink-500/20 text-pink-400 rounded-xl">
+                    <i id="icon-time" data-lucide="clock" class="w-6 h-6"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Radar Chart Section -->
+              <div class="glass-card p-6 md:p-8">
+                <div class="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 class="text-xl font-semibold text-slate-900">スキル分析</h3>
+                    <p class="text-sm text-slate-500">AIによる客観的な評価レポート</p>
+                  </div>
+                  <button class="secondary-button text-xs py-1.5 px-3">詳細を見る</button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                  <div class="chart-container h-64 md:h-80 relative">
+                    <canvas id="dashboard-radar-chart"></canvas>
+                  </div>
+
+                  <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200">
+                      <p class="text-xs font-medium text-slate-500 mb-1">論理構成力</p>
+                      <div class="flex items-end gap-2">
+                        <p id="stat-skill-logic" class="text-2xl font-bold text-indigo-600">85</p>
+                        <span class="text-xs text-slate-400 mb-1">/100</span>
+                      </div>
+                      <div class="w-full bg-slate-200 h-1 mt-2 rounded-full overflow-hidden">
+                        <div class="bg-indigo-500 h-full" style="width: 85%"></div>
+                      </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200">
+                      <p class="text-xs font-medium text-slate-500 mb-1">内容具体性</p>
+                      <div class="flex items-end gap-2">
+                        <p id="stat-skill-specificity" class="text-2xl font-bold text-purple-600">78</p>
+                        <span class="text-xs text-slate-400 mb-1">/100</span>
+                      </div>
+                      <div class="w-full bg-slate-200 h-1 mt-2 rounded-full overflow-hidden">
+                        <div class="bg-purple-500 h-full" style="width: 78%"></div>
+                      </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200">
+                      <p class="text-xs font-medium text-slate-500 mb-1">表現力</p>
+                      <div class="flex items-end gap-2">
+                        <p id="stat-skill-expression" class="text-2xl font-bold text-pink-600">92</p>
+                        <span class="text-xs text-slate-400 mb-1">/100</span>
+                      </div>
+                      <div class="w-full bg-slate-200 h-1 mt-2 rounded-full overflow-hidden">
+                        <div class="bg-pink-500 h-full" style="width: 92%"></div>
+                      </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200">
+                      <p class="text-xs font-medium text-slate-500 mb-1">積極性・意欲</p>
+                      <div class="flex items-end gap-2">
+                        <p id="stat-skill-proactive" class="text-2xl font-bold text-blue-600">88</p>
+                        <span class="text-xs text-slate-400 mb-1">/100</span>
+                      </div>
+                      <div class="w-full bg-slate-200 h-1 mt-2 rounded-full overflow-hidden">
+                        <div class="bg-blue-500 h-full" style="width: 88%"></div>
+                      </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 col-span-2">
+                      <p class="text-xs font-medium text-slate-500 mb-1">自己理解度</p>
+                      <div class="flex items-end gap-2">
+                        <p id="stat-skill-selfaware" class="text-2xl font-bold text-emerald-600">80</p>
+                        <span class="text-xs text-slate-400 mb-1">/100</span>
+                      </div>
+                      <div class="w-full bg-slate-200 h-1 mt-2 rounded-full overflow-hidden">
+                        <div class="bg-emerald-500 h-full" style="width: 80%"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Recent History -->
+              <div class="glass-card p-6 md:p-8">
+                <h3 class="text-xl font-semibold text-slate-900 mb-4">最近の面接</h3>
+                <ul id="recent-history-list" class="space-y-3">
+                  <li class="text-sm text-slate-500">履歴を読み込んでいます...</li>
+                </ul>
+                <button id="go-to-history-tab-btn"
+                  class="mt-6 text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1">
+                  すべての履歴を見る <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Training View -->
+          <section id="training-view" class="content-view">
+            <div class="space-y-8">
+              <div
+                class="p-8 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg relative overflow-hidden">
+                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                <div class="relative z-10">
+                  <h2 class="text-3xl font-bold text-white">面接設定</h2>
+                  <p class="mt-2 text-indigo-50 opacity-90 font-medium">シミュレーション条件を設定して、AI面接官とのセッションを開始します。</p>
+                </div>
+              </div>
+
+              <form id="setup-form" class="glass-card p-8 space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div>
+                    <label for="interview-type" class="flex items-center text-lg font-semibold text-slate-900 mb-3">
+                      <i class="w-5 h-5 mr-3 text-indigo-600" data-lucide="message-square"></i>
+                      面接フェーズ
+                    </label>
+                    <input id="interview-type" name="interviewType" type="text" placeholder="例: 一次面接" required
+                      class="input-field" />
+                    <p class="text-xs text-slate-500 mt-2">面接の段階を入力（例: 最終面接、カジュアル面談）</p>
+                  </div>
+
+                  <div>
+                    <label for="target-industry" class="flex items-center text-lg font-semibold text-slate-900 mb-3">
+                      <i class="w-5 h-5 mr-3 text-amber-500" data-lucide="briefcase"></i>
+                      志望業界・職種
+                    </label>
+                    <input id="target-industry" name="targetIndustry" type="text" placeholder="例: IT, エンジニア" required
+                      class="input-field" />
+                    <p class="text-xs text-slate-500 mt-2">ターゲットとする業界と職種を入力</p>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="flex items-center text-lg font-semibold text-slate-900 mb-4">
+                    <i class="w-5 h-5 mr-3 text-slate-500" data-lucide="settings-2"></i>
+                    モード選択
+                  </label>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="mode-select-card cursor-pointer group">
+                      <input type="radio" name="mode" value="training" class="sr-only peer" checked>
+                      <div
+                        class="p-6 rounded-xl border-2 border-slate-200 hover:border-indigo-300 transition-all peer-checked:border-indigo-500 peer-checked:bg-white">
+                        <div class="flex items-center justify-between mb-2">
+                          <div class="flex items-center gap-3">
+                            <div class="p-2 rounded-lg bg-indigo-50 text-indigo-600">
+                              <i class="w-5 h-5" data-lucide="sparkles"></i>
+                            </div>
+                            <h4 class="font-semibold text-slate-900">訓練モード</h4>
+                          </div>
+                          <div
+                            class="w-5 h-5 rounded-full border-2 border-slate-300 peer-checked:border-indigo-500 peer-checked:bg-indigo-500 flex items-center justify-center">
+                            <i data-lucide="check" class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100"></i>
+                          </div>
+                        </div>
+                        <p class="text-sm text-slate-500 pl-[3.25rem]">一問一答形式で、回答直後にAIからのフィードバックを受け取れます。</p>
+                      </div>
+                    </label>
+
+                    <label class="mode-select-card cursor-pointer group">
+                      <input type="radio" name="mode" value="interview" class="sr-only peer">
+                      <div
+                        class="p-6 rounded-xl border-2 border-slate-200 hover:border-rose-300 transition-all peer-checked:border-rose-500 peer-checked:bg-white">
+                        <div class="flex items-center justify-between mb-2">
+                          <div class="flex items-center gap-3">
+                            <div class="p-2 rounded-lg bg-rose-50 text-rose-600">
+                              <i class="w-5 h-5" data-lucide="message-circle"></i>
+                            </div>
+                            <h4 class="font-semibold text-slate-900">本番モード</h4>
+                          </div>
+                          <div
+                            class="w-5 h-5 rounded-full border-2 border-slate-300 peer-checked:border-rose-500 peer-checked:bg-rose-500 flex items-center justify-center">
+                            <i data-lucide="check" class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100"></i>
+                          </div>
+                        </div>
+                        <p class="text-sm text-slate-500 pl-[3.25rem]">一連の面接を行い、終了後に総合的な評価レポートを作成します。</p>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-100 flex items-start gap-3">
+                  <i data-lucide="info" class="w-5 h-5 text-indigo-600 mt-0.5 flex-shrink-0"></i>
+                  <p id="current-setting-summary" class="text-sm text-indigo-800">現在の設定: 訓練モード (毎回フィードバック)</p>
+                </div>
+
+                <div class="training-action-buttons pt-4 border-t border-slate-200">
+                  <button type="submit" class="primary-button training-start-button text-lg shadow-indigo-500/20">
+                    <i class="w-5 h-5 mr-2" data-lucide="play"></i>
+                    面接を開始する
+                  </button>
+                  <div id="training-status-message" class="training-status-message hidden mt-4">
+                    <span class="training-status-dot" aria-hidden="true"></span>
+                    <span id="training-status-text" class="text-indigo-300"></span>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </section>
+
+          <!-- Profile View -->
+          <section id="profile-view" class="content-view">
+            <div class="glass-card p-8 space-y-8">
+              <div class="flex flex-col lg:flex-row gap-10">
+                <div class="flex flex-col items-center text-center gap-4 lg:w-1/3">
+                  <button type="button" id="profile-avatar-trigger" class="avatar-trigger group relative"
+                    aria-label="プロフィール画像を変更">
+                    <img id="profile-avatar-preview" src="static/photo/default.png" alt="プロフィール画像"
+                      class="profile-avatar-preview" />
+                    <div
+                      class="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                      <i data-lucide="camera" class="text-white w-8 h-8"></i>
+                    </div>
+                  </button>
+                  <input id="profile-avatar" type="file" accept="image/*" class="sr-only" />
+
+                  <div>
+                    <p id="profile-name-display" class="text-2xl font-bold text-slate-900">名前未設定</p>
+                    <p id="profile-role-display" class="text-slate-500 mt-1">未設定</p>
+                  </div>
+
+                  <span id="profile-status-display"
+                    class="inline-flex items-center rounded-full bg-indigo-100 border border-indigo-200 px-4 py-1.5 text-sm font-medium text-indigo-700">
+                    書類選考
+                  </span>
+                </div>
+
+                <div class="flex-1 space-y-6">
+                  <div class="bg-white rounded-xl p-6 border border-slate-200">
+                    <h3 class="text-sm font-medium text-slate-500 uppercase tracking-wider mb-2">現在のステータス</h3>
+                    <p id="profile-status-description" class="text-slate-700 leading-relaxed">応募状況を設定してください。</p>
+                  </div>
+
+                  <div class="bg-white rounded-xl p-6 border border-slate-200">
+                    <h3 class="text-sm font-medium text-slate-500 uppercase tracking-wider mb-2">自己紹介メモ</h3>
+                    <p id="profile-notes-display" class="text-slate-700 leading-relaxed whitespace-pre-wrap">まだメモはありません。
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <form id="profile-form" class="space-y-6 border-t border-slate-200 pt-8">
+                <h3 class="text-lg font-semibold text-slate-900 mb-4">プロフィール編集</h3>
+                <div class="grid gap-6 sm:grid-cols-2">
+                  <div>
+                    <label for="profile-name" class="block text-sm font-medium text-slate-600 mb-2">氏名</label>
+                    <input id="profile-name" type="text" class="input-field" placeholder="例: 山田 太郎" />
+                  </div>
+                  <div>
+                    <label for="profile-email" class="block text-sm font-medium text-slate-600 mb-2">メールアドレス</label>
+                    <input id="profile-email" type="email" class="input-field" placeholder="example@mail.com" />
+                  </div>
+                  <div>
+                    <label for="profile-status" class="block text-sm font-medium text-slate-600 mb-2">応募ステータス</label>
+                    <select id="profile-status" class="input-field appearance-none">
+                      <option value="書類選考">書類選考</option>
+                      <option value="一次面接">一次面接</option>
+                      <option value="二次面接">二次面接</option>
+                      <option value="最終面接">最終面接</option>
+                      <option value="内定">内定</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="profile-role" class="block text-sm font-medium text-slate-600 mb-2">志望職種</label>
+                    <input id="profile-role" type="text" class="input-field" placeholder="例: プロダクトマネージャー" />
+                  </div>
+                </div>
+                <div>
+                  <label for="profile-notes" class="block text-sm font-medium text-slate-600 mb-2">自己紹介メモ</label>
+                  <textarea id="profile-notes" rows="4" class="input-field"
+                    placeholder="自己紹介や志望動機などのメモを記入してください。"></textarea>
+                </div>
+                <div class="flex justify-end">
+                  <button type="submit" class="primary-button">
+                    <i data-lucide="save" class="w-4 h-4 mr-2"></i>変更を保存
+                  </button>
+                </div>
+              </form>
+            </div>
+          </section>
+
+          <!-- History View -->
+          <section id="history-view" class="content-view">
+            <div class="space-y-6">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <h2 class="text-2xl font-bold text-slate-900">面接履歴</h2>
+                  <p class="text-sm text-slate-500 mt-1">過去のトレーニング記録一覧</p>
+                </div>
+                <button id="clear-history-btn-hist" class="secondary-danger-button text-sm">
+                  <i data-lucide="trash-2" class="w-4 h-4 mr-2"></i>
+                  履歴を全消去
+                </button>
+              </div>
+
+              <div class="glass-card p-4 flex items-center gap-4 overflow-x-auto">
+                <div class="flex items-center gap-2 text-sm font-semibold text-slate-600 whitespace-nowrap">
+                  <i data-lucide="filter" class="w-4 h-4"></i>
+                  フィルター:
+                </div>
+                <div class="flex gap-2">
+                  <button class="history-filter-btn active" data-filter="all">すべて</button>
+                  <button class="history-filter-btn" data-filter="7days">最近7日間</button>
+                  <button class="history-filter-btn" data-filter="30days">今月</button>
+                  <button class="history-filter-btn" data-filter="highscore">高スコア</button>
+                </div>
+              </div>
+
+              <ul id="history-list-hist" class="space-y-4">
+                <li class="text-slate-500 text-center py-8">履歴を読み込んでいます...</li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- Interview Chat View -->
+          <section id="interview-chat-view" class="content-view">
+            <div class="glass-card p-4 sm:p-6 flex flex-col h-[calc(100vh-140px)] min-h-[600px]">
+              <div class="flex items-center justify-between mb-4 pb-4 border-b border-slate-200">
+                <div>
+                  <h2 class="text-xl font-semibold text-slate-900 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    面接セッション
+                  </h2>
+                  <p id="mode-indicator" class="text-xs text-indigo-600 mt-1 font-medium"></p>
+                </div>
+                <button id="end-interview-btn"
+                  class="secondary-button text-xs py-1.5 px-3 border-red-500/30 text-red-400 hover:bg-red-500/10">
+                  終了する
+                </button>
+              </div>
+
+              <div id="chat-history" class="chat-history flex-1 space-y-4 mb-4 pr-2">
+                <div class="flex flex-col items-center justify-center h-full text-slate-500 space-y-4 opacity-60">
+                  <i data-lucide="bot" class="w-12 h-12"></i>
+                  <p>面接を開始すると、ここにチャットが表示されます。</p>
+                </div>
+              </div>
+
+              <div class="mt-auto pt-4 border-t border-slate-200">
+                <div class="flex flex-col gap-3">
+                  <div id="listening-indicator"
+                    class="hidden flex items-center gap-2 text-sm text-rose-400 justify-center py-1">
+                    <span class="inline-flex h-2 w-2 rounded-full bg-rose-500 animate-ping"></span>
+                    <span>音声認識中...</span>
+                  </div>
+
+                  <div class="flex items-end gap-3">
+                    <button id="record-voice-btn" type="button" class="voice-button flex-shrink-0" title="音声で回答する">
+                      <i data-lucide="mic" class="w-5 h-5"></i>
+                    </button>
+
+                    <div class="relative flex-1">
+                      <textarea id="user-input" rows="1"
+                        class="input-field pr-12 py-3 min-h-[3rem] max-h-32 resize-none" placeholder="回答を入力..."
+                        autocomplete="off"></textarea>
+                      <button id="send-button"
+                        class="absolute right-2 bottom-1.5 p-1.5 text-indigo-400 hover:text-indigo-300 transition-colors">
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Menu Overlay -->
+        <div id="menu-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-40 transition-opacity"></div>
+        <aside id="menu-panel"
+          class="fixed top-0 right-0 h-full w-72 bg-white border-l border-slate-200 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out z-50 p-6 space-y-6">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-slate-900">メニュー</h3>
+            <button id="close-menu-btn" class="text-slate-400 hover:text-slate-600 transition-colors">
+              <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+          </div>
+          <div class="space-y-2">
+            <button id="user-profile-info-btn"
+              class="w-full text-left text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-lg px-4 py-3 transition flex items-center gap-3">
+              <i data-lucide="user" class="w-4 h-4"></i> プロフィール
+            </button>
+            <button id="settings-btn"
+              class="w-full text-left text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-lg px-4 py-3 transition flex items-center gap-3">
+              <i data-lucide="settings" class="w-4 h-4"></i> 設定
+            </button>
+            <div class="border-b border-slate-200 my-2"></div>
+            <button id="logout-btn-menu"
+              class="w-full text-left text-sm font-medium text-rose-400 hover:bg-rose-500/10 rounded-lg px-4 py-3 transition flex items-center gap-3">
+              <i data-lucide="log-out" class="w-4 h-4"></i> ログアウト
+            </button>
+          </div>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <button id="scroll-to-top-btn"
+    class="hidden fixed bottom-6 right-6 bg-indigo-600 hover:bg-indigo-500 text-white h-12 w-12 rounded-full flex items-center justify-center shadow-lg shadow-indigo-500/30 transition-all duration-300 z-40 hover:-translate-y-1"
+    title="トップへ戻る">
+    <i data-lucide="arrow-up" class="w-6 h-6"></i>
+  </button>
+
+  <script defer src="static/app.js"></script>
+</body>
+
+</html>
