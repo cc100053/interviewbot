@@ -31,6 +31,7 @@ class Settings(BaseSettings):
     azure_speech_region: Optional[str] = Field(None, env="AZURE_SPEECH_REGION")
     azure_speech_voice: Optional[str] = Field(None, env="AZURE_SPEECH_VOICE")
 
+    gemini_api_keys: Optional[str] = Field(None, env="GEMINI_API_KEYS")
     gemini_api_key: Optional[str] = Field(None, env="GEMINI_API_KEY")
     gemini_model_name: str = Field("models/gemini-1.5-flash-latest", env="GEMINI_MODEL_NAME")
 

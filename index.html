@@ -219,7 +219,6 @@
                     <h3 class="text-xl font-semibold text-slate-900">スキル分析</h3>
                     <p class="text-sm text-slate-500">AIによる客観的な評価レポート</p>
                   </div>
-                  <button class="secondary-button text-xs py-1.5 px-3">詳細を見る</button>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
@@ -235,7 +234,7 @@
                         <span class="text-xs text-slate-400 mb-1">/100</span>
                       </div>
                       <div class="w-full bg-slate-200 h-1 mt-2 rounded-full overflow-hidden">
-                        <div class="bg-indigo-500 h-full" style="width: 85%"></div>
+                        <div id="stat-skill-logic-bar" class="bg-indigo-500 h-full" style="width: 85%"></div>
                       </div>
                     </div>
                     <div class="bg-white p-4 rounded-xl border border-slate-200">
@@ -245,7 +244,7 @@
                         <span class="text-xs text-slate-400 mb-1">/100</span>
                       </div>
                       <div class="w-full bg-slate-200 h-1 mt-2 rounded-full overflow-hidden">
-                        <div class="bg-purple-500 h-full" style="width: 78%"></div>
+                        <div id="stat-skill-specificity-bar" class="bg-purple-500 h-full" style="width: 78%"></div>
                       </div>
                     </div>
                     <div class="bg-white p-4 rounded-xl border border-slate-200">
@@ -255,7 +254,7 @@
                         <span class="text-xs text-slate-400 mb-1">/100</span>
                       </div>
                       <div class="w-full bg-slate-200 h-1 mt-2 rounded-full overflow-hidden">
-                        <div class="bg-pink-500 h-full" style="width: 92%"></div>
+                        <div id="stat-skill-expression-bar" class="bg-pink-500 h-full" style="width: 92%"></div>
                       </div>
                     </div>
                     <div class="bg-white p-4 rounded-xl border border-slate-200">
@@ -265,7 +264,7 @@
                         <span class="text-xs text-slate-400 mb-1">/100</span>
                       </div>
                       <div class="w-full bg-slate-200 h-1 mt-2 rounded-full overflow-hidden">
-                        <div class="bg-blue-500 h-full" style="width: 88%"></div>
+                        <div id="stat-skill-proactive-bar" class="bg-blue-500 h-full" style="width: 88%"></div>
                       </div>
                     </div>
                     <div class="bg-white p-4 rounded-xl border border-slate-200 col-span-2">
@@ -275,7 +274,7 @@
                         <span class="text-xs text-slate-400 mb-1">/100</span>
                       </div>
                       <div class="w-full bg-slate-200 h-1 mt-2 rounded-full overflow-hidden">
-                        <div class="bg-emerald-500 h-full" style="width: 80%"></div>
+                        <div id="stat-skill-selfaware-bar" class="bg-emerald-500 h-full" style="width: 80%"></div>
                       </div>
                     </div>
                   </div>
@@ -283,7 +282,7 @@
               </div>
 
               <!-- Recent History -->
-              <div class="glass-card p-6 md:p-8">
+              <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 md:p-8">
                 <h3 class="text-xl font-semibold text-slate-900 mb-4">最近の面接</h3>
                 <ul id="recent-history-list" class="space-y-3">
                   <li class="text-sm text-slate-500">履歴を読み込んでいます...</li>
@@ -308,7 +307,7 @@
                 </div>
               </div>
 
-              <form id="setup-form" class="glass-card p-8 space-y-8">
+              <form id="setup-form" class="bg-white border border-slate-200 rounded-2xl shadow-sm p-8 space-y-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
                     <label for="interview-type" class="flex items-center text-lg font-semibold text-slate-900 mb-3">
@@ -425,7 +424,8 @@
 
                   <div class="bg-white rounded-xl p-6 border border-slate-200">
                     <h3 class="text-sm font-medium text-slate-500 uppercase tracking-wider mb-2">自己紹介メモ</h3>
-                    <p id="profile-notes-display" class="text-slate-700 leading-relaxed whitespace-pre-wrap">まだメモはありません。
+                    <p id="profile-notes-display" class="text-slate-700 leading-relaxed whitespace-pre-wrap">
+                      まだメモはありません。
                     </p>
                   </div>
                 </div>

@@ -120,6 +120,14 @@ export function renderDashboard(history = [], stats = null) {
         selfaware: document.getElementById('stat-skill-selfaware'),
     };
 
+    const skillBarElements = {
+        logic: document.getElementById('stat-skill-logic-bar'),
+        specificity: document.getElementById('stat-skill-specificity-bar'),
+        expression: document.getElementById('stat-skill-expression-bar'),
+        proactive: document.getElementById('stat-skill-proactive-bar'),
+        selfaware: document.getElementById('stat-skill-selfaware-bar'),
+    };
+
     const skillValues = {};
     DASHBOARD_SKILLS.forEach((key) => {
         const value = Number(mergedStats.skills[key]);
@@ -127,6 +135,10 @@ export function renderDashboard(history = [], stats = null) {
         const element = skillElements[key];
         if (element) {
             element.textContent = formatScore(skillValues[key]);
+        }
+        const barElement = skillBarElements[key];
+        if (barElement) {
+            barElement.style.width = `${skillValues[key]}%`;
         }
     });
 
@@ -248,7 +260,11 @@ export function renderHistoryList(items = []) {
     items.forEach((item) => {
         const summary = normalizeSummary(item.summaryReport);
         const li = document.createElement('li');
-        li.className = 'bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100 space-y-4';
+        li.className = 'bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100 space-y-4 cursor-pointer hover:shadow-md transition-shadow';
+        li.addEventListener('click', (e) => {
+            if (e.target.closest('button') || e.target.closest('a')) return;
+            showInterviewDetails(item);
+        });
 
         const headerRow = document.createElement('div');
         headerRow.className = 'flex items-center justify-between';
@@ -268,8 +284,14 @@ export function renderHistoryList(items = []) {
             const scoreBadge = document.createElement('span');
             scoreBadge.className = `flex items-center text-sm font-semibold ${scoreColor} px-2.5 py-0.5 rounded-full`;
             scoreBadge.innerHTML = `${iconMarkup('award', 'w-4 h-4 mr-1.5')} スコア: ${score} 点`;
+            scoreBadge.innerHTML = `${iconMarkup('award', 'w-4 h-4 mr-1.5')} スコア: ${score} 点`;
             rightHeader.appendChild(scoreBadge);
         }
+
+        const chevron = document.createElement('span');
+        chevron.className = 'text-gray-400 ml-2';
+        chevron.innerHTML = iconMarkup('chevron-right', 'w-5 h-5');
+        rightHeader.appendChild(chevron);
 
         // const detailsBtn = document.createElement('button');
         // detailsBtn.type = 'button';

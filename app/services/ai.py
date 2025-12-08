@@ -19,6 +19,7 @@ except ImportError:  # pragma: no cover - optional dependency
 
 from config.settings import get_settings
 from app.services.db import normalize_transcript
+from app.services.key_manager import GeminiKeyManager
 
 logger = logging.getLogger(__name__)
 
@@ -33,10 +34,20 @@ class AIService:
         self.audio_dir = Path("static/audio")
         self.audio_dir.mkdir(parents=True, exist_ok=True)
 
-        self.use_gemini = bool(genai and self.settings.gemini_api_key)
+        # Parse API keys: prefer GEMINI_API_KEYS (comma-separated), fallback to single GEMINI_API_KEY
+        api_keys: list[str] = []
+        if self.settings.gemini_api_keys:
+            api_keys = [k.strip() for k in self.settings.gemini_api_keys.split(",") if k.strip()]
+        if not api_keys and self.settings.gemini_api_key:
+            api_keys = [self.settings.gemini_api_key]
+
+        self.key_manager = GeminiKeyManager(api_keys) if api_keys else None
+        self.use_gemini = bool(genai and api_keys)
+
         if self.use_gemini:
             try:
-                genai.configure(api_key=self.settings.gemini_api_key)
+                current_key = self.key_manager.get_current_key()
+                genai.configure(api_key=current_key)
                 model_name = self.settings.gemini_model_name or "models/gemini-1.5-flash-latest"
                 try:
                     self.generative_model = genai.GenerativeModel(model_name)
@@ -47,6 +58,11 @@ class AIService:
                         self.generative_model = genai.GenerativeModel(fallback_model)
                     else:
                         raise
+                logger.info(
+                    "Gemini initialized with %d API key(s), starting at index %d",
+                    self.key_manager.key_count,
+                    self.key_manager.get_current_index(),
+                )
             except Exception as exc:  # pragma: no cover - defensive
                 logger.warning("Failed to initialise Gemini model: %s", exc)
                 self.use_gemini = False
@@ -84,6 +100,24 @@ class AIService:
                 "voice": self.settings.azure_speech_voice if self.use_azure else None,
             },
         }
+
+    def rotate_gemini_key(self) -> None:
+        """Rotate to the next Gemini API key (round-robin).
+
+        Call this method at the start of each new interview to distribute
+        API usage across multiple keys.
+        """
+        if not self.use_gemini or not self.key_manager or self.key_manager.key_count <= 1:
+            return
+
+        next_key = self.key_manager.get_next_key()
+        if next_key:
+            try:
+                genai.configure(api_key=next_key)
+                model_name = self.settings.gemini_model_name or "models/gemini-1.5-flash-latest"
+                self.generative_model = genai.GenerativeModel(model_name)
+            except Exception as exc:  # pragma: no cover - defensive
+                logger.warning("Failed to rotate Gemini key: %s", exc)
 
     def generate_initial_question(self, setup: dict) -> dict:
         question_text = self._generate_question_text(setup)

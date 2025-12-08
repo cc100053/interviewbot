@@ -496,13 +496,7 @@ export function showInterviewDetails(interview) {
             content.appendChild(createTextFragment(entry.content ?? ''));
             row.append(role, content);
 
-            if (entry.role === 'ai' && entry.audioUrl) {
-                const player = createMiniAudioPlayer(entry.audioUrl, { autoPlay: false });
-                const playerContainer = document.createElement('div');
-                playerContainer.className = 'mt-2';
-                playerContainer.appendChild(player.wrapper);
-                row.appendChild(playerContainer);
-            }
+
 
             if (entry.timestamp) {
                 const time = document.createElement('p');

@@ -26,7 +26,7 @@ def create_app() -> FastAPI:
     app = FastAPI(title="AI Interview Trainer API")
     ai_service = get_ai_service()
 
-    app.add_middleware(
+    app.add_middleware( #HTTPのリクエストを許可する
         CORSMiddleware,
         allow_origins=["*"],
         allow_credentials=True,
@@ -34,11 +34,11 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    app.include_router(auth.router)
-    app.include_router(interview.router)
-    app.include_router(chat_router)
+    app.include_router(auth.router) #認証のルーター、もし/authが来れば認証のルーターを呼び出す
+    app.include_router(interview.router) #面接のルーター
+    app.include_router(chat_router) #チャットのルーター
 
-    app.mount("/static", StaticFiles(directory="static"), name="static")
+    app.mount("/static", StaticFiles(directory="static"), name="static") #staticのルーター
 
     @app.get("/", include_in_schema=False)
     async def root() -> FileResponse:
