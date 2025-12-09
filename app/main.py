@@ -149,7 +149,6 @@ class STTSessionHandler:
         try:
             logger.debug("STT: writing chunk %s", len(binary_data))
             self.stream.write(binary_data)
-            logger.info("STT chunk forwarded (%s bytes)", len(binary_data))
             self._write_debug_audio(binary_data)
         except Exception as exc:  # pragma: no cover - defensive
             logger.exception("Failed to write audio chunk to Azure stream: %s", exc)

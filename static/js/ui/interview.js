@@ -85,17 +85,16 @@ export function appendFinalTranscript(text) {
 }
 
 export function updateInterimTranscript(text) {
-    // This replaces the pending part.
-    // This is tricky without knowing the "committed" part.
-    // In app.js, `finalTranscript` was the committed part.
-    // We need `finalTranscript` state.
-    // I'll rely on audio.js to manage `finalTranscript` state and pass the FULL string to display?
-    // No, `updateInterimTranscript` in app.js used `finalTranscript` + `pendingTranscript`.
+    // Show the interim transcript in the user input field in real-time
+    // This displays the text being recognized while the user speaks
+    const userInputEl = document.getElementById('user-input');
+    if (!userInputEl) return;
 
-    // I will export a function `updateInputWithTranscript(final, interim)` and let audio.js call that.
-    // That's cleaner.
-    // But I need to match the exports expected by audio.js if I don't change it.
-    // I will change audio.js to call `updateInputWithTranscript`.
+    // Simply show the interim text - it updates as recognition progresses
+    if (text && text.trim()) {
+        userInputEl.value = text.trim();
+        autoResizeUserInput();
+    }
 }
 
 // Re-implementing the UI logic from app.js

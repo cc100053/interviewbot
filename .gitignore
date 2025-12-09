@@ -19,3 +19,6 @@ data/*.db
 # --- OS Generated Files ---
 .DS_Store
 Thumbs.db
+
+# --- Generated Audio Files ---
+static/audio/
