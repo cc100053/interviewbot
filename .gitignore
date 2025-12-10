@@ -22,3 +22,6 @@ Thumbs.db
 
 # --- Generated Audio Files ---
 static/audio/
+
+# --- Temporary Files ---
+tmp/

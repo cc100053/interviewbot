@@ -41,47 +41,15 @@ export function setUserInputValue(value) {
 }
 
 export function appendFinalTranscript(text) {
-    // We need to access local variables for transcript which were in app.js.
-    // But those variables (finalTranscript, pendingTranscript) are now in audio.js?
-    // No, they are state.
-    // Actually, audio.js manages the transcript building logic.
-    // audio.js calls appendFinalTranscript with the text to append.
-    // So this function just updates the UI.
-
-    // Wait, the original logic was:
-    // finalTranscript = ...
-    // setUserInputValue(finalTranscript);
-
-    // If audio.js handles the accumulation, it should pass the FULL text to us?
-    // Or we keep the state here?
-    // Let's keep the state in audio.js and audio.js passes the full text or the chunk?
-    // Original: appendFinalTranscript(text) -> updates global finalTranscript -> updates UI.
-    // So state is global.
-    // In my audio.js, I kept `finalTranscript` as a module-level variable.
-    // So audio.js should just call `setUserInputValue(finalTranscript)`.
-    // But `appendFinalTranscript` also did `finalTranscript = ...`.
-
-    // Let's assume audio.js handles the string concatenation and just calls `setUserInputValue`.
-    // But `appendFinalTranscript` was also used to update `finalTranscript` variable.
-
-    // I will implement `appendFinalTranscript` to just take the text and set it to input.
-    // The accumulation logic should be in audio.js or here.
-    // In audio.js I implemented:
-    // if (messageType === 'final') { appendFinalTranscript(incomingText); ... }
-
-    // I'll assume `text` passed here is the chunk to append.
-    // But I need the previous content.
-    // `userInputEl.value` has the previous content.
-
+    // audio.js now handles transcript accumulation and passes the FULL accumulated text.
+    // We simply set the value directly.
     const userInputEl = document.getElementById('user-input');
     if (!userInputEl) return;
 
-    const current = userInputEl.value;
     const clean = text.trim();
     if (!clean) return;
 
-    const newValue = current ? `${current}\n${clean}` : clean;
-    setUserInputValue(newValue);
+    setUserInputValue(clean);
 }
 
 export function updateInterimTranscript(text) {
