@@ -33,7 +33,19 @@ export function iconMarkup(name, className = 'w-5 h-5') {
 
 export function setPlayPauseButtonIcon(button, isPlaying) {
     if (!button) return;
-    button.innerHTML = iconMarkup(isPlaying ? 'pause' : 'play', 'w-5 h-5');
+    const playSvg = `
+        <svg viewBox="0 0 20 20" width="20" height="20" fill="currentColor" aria-hidden="true">
+            <path d="M6 4l10 6-10 6V4z"></path>
+        </svg>
+    `;
+    const pauseSvg = `
+        <svg viewBox="0 0 20 20" width="20" height="20" fill="currentColor" aria-hidden="true">
+            <path d="M6 4h3v12H6zM11 4h3v12h-3z"></path>
+        </svg>
+    `;
+    button.innerHTML = isPlaying ? pauseSvg : playSvg;
+    button.setAttribute('aria-label', isPlaying ? 'Pause' : 'Play');
+    button.title = isPlaying ? 'Pause' : 'Play';
 }
 
 export function setStatus(message = '', visible = false) {

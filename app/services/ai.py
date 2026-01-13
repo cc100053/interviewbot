@@ -299,7 +299,11 @@ class AIService:
 
     @staticmethod
     def _extract_plain_text(response) -> str:
-        text = (getattr(response, "text", None) or "").strip()
+        text = ""
+        try:
+            text = (getattr(response, "text", None) or "").strip()
+        except Exception:
+            text = ""
         if text:
             return text
         parts = []
@@ -409,7 +413,7 @@ class AIService:
 
         try:
             response = self.generative_model.generate_content(prompt)
-            text = (response.text or "").strip()
+            text = self._extract_plain_text(response)
             return text if text else "自己紹介をお願いします。"
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("Gemini question generation failed: %s", exc)

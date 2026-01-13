@@ -378,6 +378,7 @@ export function showSummaryModal(summaryPayload) {
     dialog.append(header, body);
     overlay.appendChild(dialog);
     document.body.appendChild(overlay);
+    createLucideIcons();
 
     const close = () => overlay.remove();
     closeBtn.addEventListener('click', close);
@@ -496,8 +497,16 @@ export function showInterviewDetails(interview) {
             content.appendChild(createTextFragment(entry.content ?? ''));
             row.append(role, content);
 
-            if (entry.role === 'ai' && entry.audioUrl) {
-                const player = createMiniAudioPlayer(entry.audioUrl, { autoPlay: false });
+            const audioUrl = entry.audioUrl
+                || entry.questionAudioUrl
+                || entry.nextQuestionAudioUrl
+                || entry.answerAudioUrl
+                || entry.audio_url
+                || entry.question_audio_url
+                || entry.next_question_audio_url
+                || '';
+            if (entry.role === 'ai' && audioUrl) {
+                const player = createMiniAudioPlayer(audioUrl, { autoPlay: false });
                 const playerContainer = document.createElement('div');
                 playerContainer.className = 'mt-2';
                 playerContainer.appendChild(player.wrapper);

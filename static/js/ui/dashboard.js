@@ -248,7 +248,17 @@ export function renderHistoryList(items = []) {
     items.forEach((item) => {
         const summary = normalizeSummary(item.summaryReport);
         const li = document.createElement('li');
-        li.className = 'bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100 space-y-4';
+        li.className = 'bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100 space-y-4 cursor-pointer hover:shadow-md transition-shadow';
+        li.tabIndex = 0;
+        li.setAttribute('role', 'button');
+        const openDetails = () => showInterviewDetails(item);
+        li.addEventListener('click', openDetails);
+        li.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                openDetails();
+            }
+        });
 
         const headerRow = document.createElement('div');
         headerRow.className = 'flex items-center justify-between';
