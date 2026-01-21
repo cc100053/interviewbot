@@ -37,15 +37,38 @@ class AIService:
         if self.use_gemini:
             try:
                 genai.configure(api_key=self.settings.gemini_api_key)
-                model_name = self.settings.gemini_model_name or "models/gemini-1.5-flash-latest"
+                model_name = self.settings.gemini_model_name or "models/gemini-3-flash-preview"
                 try:
                     self.generative_model = genai.GenerativeModel(model_name)
                 except Exception:
-                    fallback_model = "models/gemini-1.5-flash-latest"
-                    if model_name != fallback_model:
-                        logger.warning("Gemini model %s unavailable, falling back to %s", model_name, fallback_model)
-                        self.generative_model = genai.GenerativeModel(fallback_model)
-                    else:
+                    # Fallback chain
+                    fallback_models = [
+                        "models/gemini-2.5-flash",
+                        "models/gemini-flash-latest",
+                        "models/gemini-1.5-flash-latest",
+                    ]
+                    
+                    model_found = False
+                    for fallback in fallback_models:
+                        if model_name == fallback:
+                            continue
+                            
+                        try:
+                            logger.warning(
+                                "Gemini model %s unavailable, trying fallback %s", 
+                                model_name, 
+                                fallback
+                            )
+                            self.generative_model = genai.GenerativeModel(fallback)
+                            model_found = True
+                            # Update model_name to the working one so get_status reports correctly
+                            model_name = fallback 
+                            break
+                        except Exception:
+                            continue
+                    
+                    if not model_found:
+                        logger.error("All Gemini models failed including fallbacks.")
                         raise
             except Exception as exc:  # pragma: no cover - defensive
                 logger.warning("Failed to initialise Gemini model: %s", exc)
