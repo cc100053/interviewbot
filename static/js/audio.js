@@ -24,10 +24,11 @@ let pendingTranscript = '';
 let finalTranscript = ''; // Local variable to track transcript during recording
 
 // Helper to reset local transcript state
-export function resetTranscriptState() {
+export function resetTranscriptState(initialText = '') {
     liveTranscript = '';
     pendingTranscript = '';
-    finalTranscript = '';
+    // Preserve any pre-existing text so new STT audio appends to it
+    finalTranscript = initialText && initialText.trim() ? initialText : '';
 }
 
 export function stopRecordingStream() {
@@ -144,8 +145,10 @@ export async function startRecording() {
     }
 
     stopCurrentAiAudio();
-    resetTranscriptState();
-    audioCallbacks.onInputUpdate('');
+    const userInputEl = document.getElementById('user-input');
+    const existingInput = userInputEl ? userInputEl.value : '';
+    resetTranscriptState(existingInput);
+    audioCallbacks.onInputUpdate(existingInput || '');
     setStatus('音声認識を準備しています…', true);
 
     try {
@@ -242,25 +245,39 @@ export async function startRecording() {
             if (!incomingText) {
                 if (messageType === 'final' && pendingTranscript) {
                     // Call UI to append final
-                    audioCallbacks.onFinalTranscript(pendingTranscript);
+                    finalTranscript = finalTranscript ? `${finalTranscript} ${pendingTranscript}` : pendingTranscript;
+                    audioCallbacks.onFinalTranscript(finalTranscript);
+                    pendingTranscript = '';
                 }
                 return;
             }
             console.log('[STT] received transcript', messageType, incomingText);
             if (messageType === 'final') {
-                audioCallbacks.onFinalTranscript(incomingText);
+                // Append to accumulated final transcript
+                finalTranscript = finalTranscript ? `${finalTranscript} ${incomingText}` : incomingText;
+                audioCallbacks.onFinalTranscript(finalTranscript);
                 liveTranscript = '';
+                pendingTranscript = '';
                 return;
             }
             liveTranscript = incomingText;
-            audioCallbacks.onInterimTranscript(incomingText);
+            pendingTranscript = incomingText;
+            // Show accumulated final text + current interim text
+            const displayText = finalTranscript ? `${finalTranscript} ${incomingText}` : incomingText;
+            audioCallbacks.onInterimTranscript(displayText);
         };
 
         sttSocket.onclose = () => {
             console.log('[STT] socket closed');
             sttSocket = null;
+            // If there's pending transcript, add it to final
             if (pendingTranscript.trim()) {
-                audioCallbacks.onFinalTranscript(pendingTranscript);
+                finalTranscript = finalTranscript ? `${finalTranscript} ${pendingTranscript}` : pendingTranscript;
+                pendingTranscript = '';
+            }
+            // Update UI with final accumulated transcript
+            if (finalTranscript.trim()) {
+                audioCallbacks.onFinalTranscript(finalTranscript);
             }
             cleanupAudioGraph();
             setRecordingState(false);

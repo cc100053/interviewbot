@@ -29,8 +29,8 @@ def _feedback_snippet(text: Optional[str]) -> Optional[str]:
     if not text:
         return None
     for line in str(text).splitlines():
-        snippet = line.strip()
-        if snippet:
+        snippet = line.strip() #冒頭の空白を削除
+        if snippet: #もしsnippetが空じゃない
             return snippet[:140]
     return None
 
@@ -46,7 +46,7 @@ class ChatRequest(BaseModel):
     chat_history: Optional[List[ChatMessage]] = Field(None, alias="chatHistory")
 
     class Config:
-        allow_population_by_field_name = True
+        allow_population_by_field_name = True #JavaScriptとPythonスタイルも対応できる
 
 
 class ChatResponse(BaseModel):
@@ -102,7 +102,7 @@ class InterviewSummary(BaseModel):
     id: str
     created_at: str = Field(..., alias="createdAt")
     setup: dict
-    transcript: List[dict]
+    transcript: List[dict] #入力Hint、内容はJSON
     last_question: Optional[str] = Field(None, alias="lastQuestion")
     last_question_audio_url: Optional[str] = Field(None, alias="lastQuestionAudioUrl")
     mode: Optional[str] = Field(None, alias="mode")
@@ -131,7 +131,7 @@ class InterviewFinishResponse(BaseModel):
 
 router = APIRouter(prefix="/interviews", tags=["interviews"])
 chat_router = APIRouter(tags=["chat"])
-
+#tupleは変更できないList
 SKILL_KEYS: tuple[str, ...] = ("logic", "specificity", "expression", "proactive", "selfaware")
 
 
@@ -252,6 +252,9 @@ async def start_interview(
     ai_service: AIService = Depends(get_ai_service),
 ) -> InterviewStartResponse:
     """Start a new interview session for the current user."""
+    # Rotate to the next Gemini API key for load balancing
+    ai_service.rotate_gemini_key()
+
     setup_payload = request.dict(by_alias=True)
     setup_payload.pop("mode", None)
     question_payload = ai_service.generate_initial_question(setup_payload)
@@ -379,7 +382,7 @@ async def process_answer(
 
 
 @chat_router.post("/chat", response_model=ChatResponse)
-async def chat_endpoint(
+def chat_endpoint(
     request: ChatRequest,
     user: dict = Depends(get_current_user),
     db: DatabaseService = Depends(get_db_service),

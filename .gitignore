@@ -20,5 +20,8 @@ data/*.db
 .DS_Store
 Thumbs.db
 
-# --- Audio Files ---
+# --- Generated Audio Files ---
 static/audio/
+
+# --- Temporary Files ---
+tmp/
