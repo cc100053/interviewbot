@@ -149,6 +149,53 @@ export function randomThinkingMessage() {
     return thinkingMessages[index];
 }
 
+// Thinking Bubble Helper
+function showThinkingBubble() {
+    const chatEl = getChatHistoryElement();
+    if (!chatEl) return;
+
+    // Avoid duplicates
+    if (document.getElementById('ai-thinking-bubble')) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.id = 'ai-thinking-bubble';
+    wrapper.className = 'chat-message ai fade-in';
+
+    const label = document.createElement('div');
+    label.className = 'chat-role';
+    label.textContent = 'AI面接官';
+
+    const body = document.createElement('div');
+    body.className = 'chat-content flex items-center gap-2';
+
+    // Simple 3-dot animation
+    const dots = document.createElement('div');
+    dots.className = 'flex gap-1 px-1';
+    dots.innerHTML = `
+        <span class="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style="animation-delay: 0ms"></span>
+        <span class="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style="animation-delay: 150ms"></span>
+        <span class="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style="animation-delay: 300ms"></span>
+    `;
+
+    // Optional text
+    const text = document.createElement('span');
+    text.className = 'text-sm text-slate-500 ml-1';
+    text.textContent = 'AIが回答を作成中...';
+
+    body.append(dots, text);
+    wrapper.append(label, body);
+
+    chatEl.appendChild(wrapper);
+    wrapper.scrollIntoView({ behavior: 'smooth', block: 'end' });
+}
+
+function removeThinkingBubble() {
+    const bubble = document.getElementById('ai-thinking-bubble');
+    if (bubble) {
+        bubble.remove();
+    }
+}
+
 export async function handleSend(event) {
     if (event) {
         event.preventDefault();
@@ -170,6 +217,10 @@ export async function handleSend(event) {
 
     setUserInputValue('');
     updateSendDisabled(true);
+
+    // Show thinking indicator
+    showThinkingBubble();
+
     try {
         const data = await apiRequest('/chat', {
             method: 'POST',
@@ -179,12 +230,21 @@ export async function handleSend(event) {
                 chatHistory: state.chatHistory,
             }),
             statusMessage: randomThinkingMessage(),
+            skipStatus: true, // We use our own bubble now
         });
+        removeThinkingBubble();
         handleAiResponse(data);
         await refreshHistory();
     } catch (error) {
-        showToast(error.message || '回答の送信に失敗しました。', 'error');
+        removeThinkingBubble();
+        if (error.message && error.message.includes('404')) {
+            showToast('セッションが切れました。最初からやり直してください。', 'error');
+            resetInterviewState();
+        } else {
+            showToast(error.message || '回答の送信に失敗しました。', 'error');
+        }
     } finally {
+        removeThinkingBubble(); // Ensure it's gone
         updateSendDisabled(false);
         if (userInputEl) {
             userInputEl.focus();
@@ -238,6 +298,7 @@ export async function handleSetupSubmit(event) {
     const payload = {
         interviewType: formData.get('interviewType'),
         targetIndustry: formData.get('targetIndustry'),
+        motivationAndSelfPr: formData.get('motivationAndSelfPr'),
         mode: selectedMode,
     };
     setTrainingStatusMessage('最初の質問を準備中…');

@@ -89,8 +89,7 @@
                   placeholder="••••••••" />
               </div>
               <div id="login-error-alert"
-                class="hidden p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 border border-red-200"
-                role="alert">
+                class="hidden p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 border border-red-200" role="alert">
                 <span class="font-medium">ログイン失敗:</span>
                 <span id="login-error-text">IDまたはパスワードが違います。</span>
               </div>
@@ -119,8 +118,7 @@
                   placeholder="••••••••" />
               </div>
               <div id="signup-error-alert"
-                class="hidden p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 border border-red-200"
-                role="alert">
+                class="hidden p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 border border-red-200" role="alert">
                 <span class="font-medium">登録失敗:</span>
                 <span id="signup-error-text">このIDは既に使用されています。</span>
               </div>
@@ -328,6 +326,17 @@
                       class="input-field" />
                     <p class="text-xs text-slate-500 mt-2">ターゲットとする業界と職種を入力</p>
                   </div>
+                </div>
+
+                <div>
+                  <label for="motivation-and-self-pr"
+                    class="flex items-center text-lg font-semibold text-slate-900 mb-3">
+                    <i class="w-5 h-5 mr-3 text-red-500" data-lucide="file-text"></i>
+                    志望動機・自己PR (任意)
+                  </label>
+                  <textarea id="motivation-and-self-pr" name="motivationAndSelfPr" rows="4"
+                    placeholder="例: この業界を志望する理由は..." class="input-field"></textarea>
+                  <p class="text-xs text-slate-500 mt-2">AIがこの内容を踏まえて質問を行います。</p>
                 </div>
 
                 <div>

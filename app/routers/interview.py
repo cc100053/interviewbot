@@ -65,6 +65,7 @@ class ChatResponse(BaseModel):
 class InterviewSetupRequest(BaseModel):
     interview_type: str = Field(..., alias="interviewType")
     target_industry: str = Field(..., alias="targetIndustry")
+    motivation_and_self_pr: Optional[str] = Field(None, alias="motivationAndSelfPr")
     mode: str = Field(..., alias="mode")
 
     class Config:
@@ -319,7 +320,7 @@ async def process_answer(
         transcript.append(user_entry)
 
         try:
-            ai_result = ai_service.chat_response(transcript, mode="interview")
+            ai_result = ai_service.chat_response(transcript, mode="interview", setup=interview.get("setup"))
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("AI chat response failed: %s", exc)
             db.update_interview(request.interview_id, {"transcript": transcript})
@@ -352,7 +353,7 @@ async def process_answer(
 
     question_text = interview.get("last_question", "")
     question_audio_url = interview.get("last_question_audio_url") or ""
-    ai_result = ai_service.analyze_answer(request.answer_text, request.interview_id)
+    ai_result = ai_service.analyze_answer(request.answer_text, request.interview_id, setup=interview.get("setup"))
     next_question_text = ai_result.get("next_question_text", "")
     next_question_audio_url = ai_result.get("next_question_audio_url") or ""
     feedback_text = ai_result.get("feedback")
@@ -411,7 +412,7 @@ def chat_endpoint(
     transcript.append(user_entry)
 
     try:
-        ai_result = ai_service.chat_response(transcript, mode=mode)
+        ai_result = ai_service.chat_response(transcript, mode=mode, setup=interview.get("setup"))
     except Exception as exc:  # pragma: no cover - defensive
         logger.warning("AI chat response failed: %s", exc)
         db.update_interview(interview_id, {"transcript": transcript})
@@ -509,7 +510,7 @@ async def process_audio_answer(
         transcript.append(user_entry)
 
         try:
-            ai_result = ai_service.chat_response(transcript, mode="interview")
+            ai_result = ai_service.chat_response(transcript, mode="interview", setup=interview.get("setup"))
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("AI chat response failed: %s", exc)
             db.update_interview(interview_id, {"transcript": transcript})
@@ -540,7 +541,9 @@ async def process_audio_answer(
             nextQuestionAudioUrl=ai_result.get("next_question_audio_url"),
         )
 
-    ai_result = ai_service.analyze_answer(audio_bytes, interview_id, content_type=audio_content_type)
+    ai_result = ai_service.analyze_answer(
+        audio_bytes, interview_id, content_type=audio_content_type, setup=interview.get("setup")
+    )
 
     question_text = interview.get("last_question", "")
     question_audio_url = interview.get("last_question_audio_url") or ""

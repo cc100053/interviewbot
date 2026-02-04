@@ -48,7 +48,7 @@ class AIService:
             try:
                 current_key = self.key_manager.get_current_key()
                 genai.configure(api_key=current_key)
-                model_name = self.settings.gemini_model_name or "models/gemini-1.5-flash-latest"
+                model_name = self.settings.gemini_model_name or "models/gemini-3-flash-preview"
                 try:
                     self.generative_model = genai.GenerativeModel(model_name)
                 except Exception:
@@ -154,7 +154,13 @@ class AIService:
             "audio_url": audio_url,
         }
 
-    def analyze_answer(self, answer_payload, interview_id: str, content_type: Optional[str] = None) -> dict:
+    def analyze_answer(
+        self,
+        answer_payload,
+        interview_id: str,
+        content_type: Optional[str] = None,
+        setup: Optional[dict] = None,
+    ) -> dict:
         """Accept either text (str) or audio bytes and return feedback + next question."""
 
         if isinstance(answer_payload, bytes):
@@ -162,7 +168,8 @@ class AIService:
         else:
             transcript = str(answer_payload)
 
-        feedback, next_question = self._generate_feedback(transcript)
+        motivation = setup.get("motivationAndSelfPr") if setup else None
+        feedback, next_question = self._generate_feedback(transcript, motivation_text=motivation)
         next_audio_url = None
         if next_question and self.use_azure:
             next_audio_url = self._synthesize_text(next_question)
@@ -174,13 +181,15 @@ class AIService:
             "next_question_audio_url": next_audio_url or "",
         }
 
-    def chat_response(self, chat_history, mode: str = "training") -> dict:
+    def chat_response(self, chat_history, mode: str = "training", setup: Optional[dict] = None) -> dict:
         """Generate the next response based on the configured interview mode."""
         normalized_history = normalize_transcript(chat_history)
         current_mode = (mode or "training").lower()
 
+        motivation = setup.get("motivationAndSelfPr") if setup else None
+
         if current_mode == "interview":
-            next_question = self._generate_interview_next_question(normalized_history)
+            next_question = self._generate_interview_next_question(normalized_history, motivation_text=motivation)
             if not next_question:
                 next_question = "志望動機を教えてください。"
             question_audio_url = ""
@@ -211,7 +220,7 @@ class AIService:
         user_message = latest_message.get("content", "")
         history_text = self._build_history_text(normalized_history[:-1])
 
-        feedback, next_question = self._generate_feedback(user_message, history_text)
+        feedback, next_question = self._generate_feedback(user_message, history_text, motivation_text=motivation)
         combined = f"フィードバック：\n{feedback}\n\n次の質問：\n{next_question}"
         question_audio_url = ""
         if self.use_azure and next_question:
@@ -402,7 +411,7 @@ class AIService:
     # Internal helpers
     # ------------------------------------------------------------------
 
-    def _generate_interview_next_question(self, history: list[dict]) -> str:
+    def _generate_interview_next_question(self, history: list[dict], motivation_text: Optional[str] = None) -> str:
         if not self.use_gemini:
             return "志望動機を教えてください。"
 
@@ -413,6 +422,8 @@ class AIService:
             "フィードバックや解説は出力せず、質問文のみを作成してください。"
             "この面接は標準的な30分を想定しています。現在の会話履歴を考慮し、既に約5〜6つの主要な質問が議論されていると判断できる場合は、"
             "新しい話題の質問ではなく、面接を締めくくる質問（例：「最後に、何か質問はありますか？」）を生成してください。"
+            "これを行うにあたり、以下の候補者事前情報（志望動機・自己PR）があれば参考にし、もし回答と矛盾していたり、さらに深掘りできる点があれば積極的に活用してください。\n"
+            f"**事前情報:** {motivation_text or 'なし'}\n\n"
             '必ず次のJSON形式で回答してください: {"next_question": "質問文"}'
         )
         try:
@@ -432,51 +443,26 @@ class AIService:
             return "志望動機を教えてください。"
 
     def _generate_question_text(self, setup: dict) -> str:
-        if not self.use_gemini:
-            return "自己紹介をお願いします。"
+        # "Option 1" Instant Start:
+        # Instead of calling the AI (slow), we return a standard opening question immediately.
+        # The AI will "catch up" and use the motivation context in the second question (Round 2).
+        
+        import random
+        
+        # Define patterns. We can choose based on implicit "tone" or just random variety.
+        # These are safe, standard openings suitable for almost any Japanese interview.
+        patterns = [
+            "本日はお時間をいただきありがとうございます。まずは自己紹介をお願いいたします。",
+            "本日はよろしくお願いいたします。はじめに、簡単に自己紹介をお願いできますか？",
+            "お忙しい中お集まりいただきありがとうございます。まずは自己紹介からお話しいただけますでしょうか。",
+            "本日はよろしくお願いいたします。あまり緊張なさらず、リラックスしてお話しください。まずは自己紹介をお願いします。",
+        ]
+        
+        return random.choice(patterns)
 
-        setup = setup or {}
-        interview_type = setup.get("interviewType", "一般的な面接")
-        industry_and_role = setup.get("targetIndustry", "指定なし")
-
-        persona = "あなたは日本のプロの面接官です。"
-        if "一次面接" in interview_type:
-            persona = (
-                "あなたはHR（人事）担当者として、候補者の性格、コミュニケーションスキル、基本的なモチベーションを評価する「一次面接」を行っています。"
-            )
-        elif "二次面接" in interview_type:
-            persona = (
-                "あなたは部署のマネージャーまたはチームリーダーとして、候補者の専門スキル、経験、チーム適合性を評価する「二次面接」を行っています。"
-            )
-        elif "最終面接" in interview_type:
-            persona = (
-                "あなたは役員または社長として、候補者の長期的なカルチャーフィットと入社意欲を評価する「最終面接」を行っています。"
-            )
-
-        prompt = f"""
-{persona}
-
-以下のコンテキストに基づいて、面接の**最初の質問を1つだけ**、簡潔に日本語で生成してください。
-
-**コンテキスト:**
-- **面接タイプ:** {interview_type}
-- **志望業界 & 職種:** {industry_and_role}
-
-あなたの役割（{persona}）と、候補者の志望（{industry_and_role}）に最もふさわしい、自然な開始の質問をしてください。
-(例: 「自己紹介をお願いします」や「本日はよろしくお願いします。まず、{industry_and_role}を志望された理由を教えていただけますか？」など)
-
-質問文のみを返してください。
-""".strip()
-
-        try:
-            response = self.generative_model.generate_content(prompt)
-            text = self._extract_plain_text(response)
-            return text if text else "自己紹介をお願いします。"
-        except Exception as exc:  # pragma: no cover - defensive
-            logger.warning("Gemini question generation failed: %s", exc)
-            return "自己紹介をお願いします。"
-
-    def _generate_feedback(self, transcript: str, history_text: Optional[str] = None) -> tuple[str, str]:
+    def _generate_feedback(
+        self, transcript: str, history_text: Optional[str] = None, motivation_text: Optional[str] = None
+    ) -> tuple[str, str]:
         if not self.use_gemini or not transcript:
             return (
                 "フィードバックのプレースホルダーです。",
@@ -492,6 +478,8 @@ You are an expert Japanese interview coach (面接コーチ) conducting a realis
 * Guide the user towards better responses by explaining *why* certain approaches are more effective.
 * Pay special attention to Japanese language use (敬語 - keigo, 言葉遣い - kotobazukai), especially if the user seems non-native, offering polite corrections and suggestions.
 * Ask logical, relevant follow-up questions based on the user's answers and the overall interview flow.
+* If provided, use the candidate's background info (Motivation & Self-PR) to check consistency or deeper interest.
+**Candidate Info:** {motivation_text or 'None'}
 
 **Analysis and Feedback Process:**
 When analyzing the user's latest response (provided in the prompt context, along with previous history):
