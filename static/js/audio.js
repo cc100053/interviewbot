@@ -113,7 +113,7 @@ export function setRecordingState(isRecording) {
     if (recordButtonEl) {
         recordButtonEl.classList.toggle('recording', isRecording);
         recordButtonEl.innerHTML = isRecording
-            ? '<span class="font-semibold text-sm text-rose-600" aria-hidden="true">停止</span><span class="sr-only">録音を停止</span>'
+            ? '<span class="font-semibold text-sm" style="color:#c0392b;" aria-hidden="true">停止</span><span class="sr-only">録音を停止</span>'
             : `<span class="sr-only">音声入力を開始</span>${iconMarkup('mic', 'w-5 h-5')}`;
         recordButtonEl.setAttribute('aria-pressed', String(isRecording));
         recordButtonEl.title = isRecording ? '録音を停止' : '音声で回答する';
@@ -367,30 +367,34 @@ export function stopCurrentAiAudio(options = {}) {
 export function createMiniAudioPlayer(audioUrl, options = {}) {
     const { autoPlay = false } = options;
     const playerWrapper = document.createElement('div');
-    playerWrapper.className = 'mini-audio-player bg-slate-100 border border-slate-200 rounded-xl mt-3 p-3 shadow-sm';
+    playerWrapper.className = 'mini-audio-player';
 
     const controlRow = document.createElement('div');
     controlRow.className = 'flex items-center gap-3';
 
     const playPauseBtn = document.createElement('button');
     playPauseBtn.type = 'button';
-    playPauseBtn.className = 'play-pause-btn text-blue-600 hover:text-blue-700 text-lg';
+    playPauseBtn.className = 'play-pause-btn text-lg';
+    playPauseBtn.style.color = '#1a1a1a';
     setPlayPauseButtonIcon(playPauseBtn, false);
 
     const currentTimeEl = document.createElement('span');
-    currentTimeEl.className = 'current-time text-xs w-12 text-right font-mono text-slate-600';
+    currentTimeEl.className = 'current-time text-xs w-12 text-right font-mono';
+    currentTimeEl.style.color = '#5c5c5c';
     currentTimeEl.textContent = '0:00';
 
     const progressBar = document.createElement('input');
     progressBar.type = 'range';
-    progressBar.className = 'progress-bar flex-grow h-1.5 cursor-pointer accent-blue-600';
+    progressBar.className = 'progress-bar flex-grow h-1.5 cursor-pointer';
+    progressBar.style.accentColor = '#1a1a1a';
     progressBar.value = 0;
     progressBar.min = 0;
     progressBar.max = 0;
     progressBar.step = 0.1;
 
     const totalTimeEl = document.createElement('span');
-    totalTimeEl.className = 'total-time text-xs w-12 font-mono text-slate-600';
+    totalTimeEl.className = 'total-time text-xs w-12 font-mono';
+    totalTimeEl.style.color = '#5c5c5c';
     totalTimeEl.textContent = '0:00';
 
     controlRow.append(playPauseBtn, currentTimeEl, progressBar, totalTimeEl);

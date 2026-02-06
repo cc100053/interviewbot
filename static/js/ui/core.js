@@ -2,13 +2,14 @@ import { state } from '../state.js';
 
 export function showToast(message, type = 'info') {
     const borderColors = {
-        info: 'border-blue-500',
-        error: 'border-rose-500',
-        warning: 'border-amber-500',
+        info: '#1a1a1a',
+        error: '#c0392b',
+        warning: '#c85a3a',
     };
     const container = document.createElement('div');
     const borderColor = borderColors[type] ?? borderColors.info;
-    container.className = `fixed bottom-6 right-6 text-sm px-5 py-3 rounded-lg shadow-xl bg-white text-slate-700 border-l-4 ${borderColor} font-medium z-50`;
+    container.className = 'fixed bottom-6 right-6 text-sm px-5 py-3 rounded-lg font-medium z-50';
+    container.style.cssText = `background:#ffffff; color:#1a1a1a; border-left:4px solid ${borderColor}; box-shadow:0 8px 24px rgba(0,0,0,0.1); border:1px solid #e0dcd5; border-left:4px solid ${borderColor};`;
     container.textContent = message;
     document.body.appendChild(container);
     setTimeout(() => container.remove(), 2500);
@@ -89,13 +90,16 @@ export function scrollToTop() {
 export function showConfirmDialog(message) {
     return new Promise((resolve) => {
         const overlay = document.createElement('div');
-        overlay.className = 'fixed inset-0 bg-slate-900/40 flex items-center justify-center z-50';
+        overlay.className = 'fixed inset-0 flex items-center justify-center z-50';
+        overlay.style.background = 'rgba(0,0,0,0.35)';
 
         const dialog = document.createElement('div');
-        dialog.className = 'bg-white border border-slate-200 rounded-2xl p-6 w-full max-w-xs text-sm space-y-5 shadow-2xl';
+        dialog.className = 'p-6 w-full max-w-xs text-sm space-y-5';
+        dialog.style.cssText = 'background:#ffffff; border:1px solid #e0dcd5; border-radius:1rem; box-shadow:0 8px 24px rgba(0,0,0,0.12);';
 
         const text = document.createElement('p');
-        text.className = 'text-slate-700 leading-relaxed';
+        text.className = 'leading-relaxed';
+        text.style.color = '#1a1a1a';
         text.textContent = message;
 
         const actions = document.createElement('div');

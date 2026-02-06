@@ -172,15 +172,15 @@ function showThinkingBubble() {
     const dots = document.createElement('div');
     dots.className = 'flex gap-1 px-1';
     dots.innerHTML = `
-        <span class="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style="animation-delay: 0ms"></span>
-        <span class="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style="animation-delay: 150ms"></span>
-        <span class="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style="animation-delay: 300ms"></span>
+        <span class="w-1.5 h-1.5 rounded-full animate-bounce" style="background:#c85a3a; animation-delay: 0ms"></span>
+        <span class="w-1.5 h-1.5 rounded-full animate-bounce" style="background:#c85a3a; animation-delay: 150ms"></span>
+        <span class="w-1.5 h-1.5 rounded-full animate-bounce" style="background:#c85a3a; animation-delay: 300ms"></span>
     `;
 
-    // Optional text
     const text = document.createElement('span');
-    text.className = 'text-sm text-slate-500 ml-1';
-    text.textContent = 'AIが回答を作成中...';
+    text.className = 'text-sm ml-1';
+    text.style.color = '#9a9a9a';
+    text.textContent = '回答を作成中...';
 
     body.append(dots, text);
     wrapper.append(label, body);
@@ -342,26 +342,32 @@ export function showSummaryModal(summaryPayload) {
     const summaryText = summaryData?.text ?? (typeof summaryPayload === 'string' ? summaryPayload : '');
 
     const overlay = document.createElement('div');
-    overlay.className = 'fixed inset-0 bg-slate-900/40 flex items-center justify-center z-50 px-4';
+    overlay.className = 'fixed inset-0 flex items-center justify-center z-50 px-4';
+    overlay.style.background = 'rgba(0,0,0,0.35)';
 
     const dialog = document.createElement('div');
-    dialog.className = 'bg-white border border-slate-200 rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col shadow-2xl';
+    dialog.className = 'w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col';
+    dialog.style.cssText = 'background:#ffffff; border:1px solid #e0dcd5; border-radius:1.25rem; box-shadow:0 8px 24px rgba(0,0,0,0.12);';
 
     const header = document.createElement('div');
-    header.className = 'flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50';
+    header.className = 'flex items-center justify-between px-5 py-4';
+    header.style.cssText = 'border-bottom:1px solid #e0dcd5; background:#f5f2ed;';
     const title = document.createElement('h3');
-    title.className = 'text-lg font-semibold text-slate-900';
+    title.className = 'text-base font-bold';
+    title.style.color = '#1a1a1a';
     title.textContent = '面接サマリー';
     const closeBtn = document.createElement('button');
     closeBtn.type = 'button';
-    closeBtn.className = 'text-slate-500 hover:text-slate-900 text-sm';
+    closeBtn.className = 'text-sm';
+    closeBtn.style.color = '#9a9a9a';
     closeBtn.textContent = '閉じる';
     header.append(title, closeBtn);
 
     const body = document.createElement('div');
-    body.className = 'px-5 py-4 overflow-y-auto bg-white';
+    body.className = 'px-5 py-4 overflow-y-auto';
     const summaryParagraph = document.createElement('p');
-    summaryParagraph.className = 'text-sm text-slate-700 whitespace-pre-wrap leading-relaxed';
+    summaryParagraph.className = 'text-sm whitespace-pre-wrap leading-relaxed';
+    summaryParagraph.style.color = '#1a1a1a';
     summaryParagraph.appendChild(createTextFragment(summaryText || 'サマリーがありません。'));
     body.appendChild(summaryParagraph);
 
@@ -376,7 +382,8 @@ export function showSummaryModal(summaryPayload) {
     }
     if (summaryMetaParts.length) {
         const statsLine = document.createElement('p');
-        statsLine.className = 'text-xs text-slate-500 mt-3';
+        statsLine.className = 'text-xs mt-3';
+        statsLine.style.color = '#9a9a9a';
         statsLine.textContent = summaryMetaParts.join(' / ');
         body.appendChild(statsLine);
     }
@@ -390,12 +397,15 @@ export function showSummaryModal(summaryPayload) {
                 return;
             }
             const card = document.createElement('div');
-            card.className = 'bg-slate-100 rounded-lg px-3 py-2 flex flex-col gap-1';
+            card.className = 'rounded-lg px-3 py-2 flex flex-col gap-1';
+            card.style.cssText = 'background:#f5f2ed; border:1px solid #e0dcd5;';
             const label = document.createElement('span');
-            label.className = 'text-[11px] font-medium text-slate-500';
+            label.className = 'text-[11px] font-semibold uppercase';
+            label.style.cssText = 'color:#9a9a9a; letter-spacing:0.06em;';
             label.textContent = SKILL_LABELS[skillKey] || skillKey;
             const score = document.createElement('span');
-            score.className = 'text-base font-semibold text-slate-800';
+            score.className = 'text-base font-bold';
+            score.style.color = '#1a1a1a';
             score.textContent = formatScore(value);
             card.append(label, score);
             skillsGrid.appendChild(card);
@@ -456,29 +466,35 @@ export async function handleEndInterview() {
 
 export function showInterviewDetails(interview) {
     const overlay = document.createElement('div');
-    overlay.className = 'fixed inset-0 bg-slate-900/40 flex items-center justify-center z-50 px-4';
+    overlay.className = 'fixed inset-0 flex items-center justify-center z-50 px-4';
+    overlay.style.background = 'rgba(0,0,0,0.35)';
 
     const dialog = document.createElement('div');
-    dialog.className = 'bg-white border border-slate-200 rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col shadow-2xl';
+    dialog.className = 'w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col';
+    dialog.style.cssText = 'background:#ffffff; border:1px solid #e0dcd5; border-radius:1.25rem; box-shadow:0 8px 24px rgba(0,0,0,0.12);';
 
     const header = document.createElement('div');
-    header.className = 'flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50';
+    header.className = 'flex items-center justify-between px-5 py-4';
+    header.style.cssText = 'border-bottom:1px solid #e0dcd5; background:#f5f2ed;';
     const title = document.createElement('h3');
-    title.className = 'text-lg font-semibold text-slate-900';
+    title.className = 'text-base font-bold';
+    title.style.color = '#1a1a1a';
     title.textContent = '面接詳細';
     const closeBtn = document.createElement('button');
     closeBtn.type = 'button';
-    closeBtn.className = 'text-slate-500 hover:text-slate-900 text-sm';
+    closeBtn.className = 'text-sm';
+    closeBtn.style.color = '#9a9a9a';
     closeBtn.textContent = '閉じる';
     header.append(title, closeBtn);
 
     const body = document.createElement('div');
-    body.className = 'px-5 py-4 overflow-y-auto space-y-4 bg-white';
+    body.className = 'px-5 py-4 overflow-y-auto space-y-4';
 
     const summaryData = normalizeSummary(interview.summaryReport);
     const formattedDate = formatDateToJst(interview.createdAt || interview.created_at);
     const meta = document.createElement('div');
-    meta.className = 'text-sm text-slate-700 space-y-1';
+    meta.className = 'text-sm space-y-1';
+    meta.style.color = '#1a1a1a';
     const modeLabel = interview.mode === 'interview' ? '面接モード' : '訓練モード';
     const metaLines = [
         `実施日時: ${formattedDate}`,
@@ -495,7 +511,8 @@ export function showInterviewDetails(interview) {
 
     const transcriptSection = document.createElement('div');
     const transcriptTitle = document.createElement('h4');
-    transcriptTitle.className = 'text-sm font-semibold text-slate-900';
+    transcriptTitle.className = 'text-sm font-bold';
+    transcriptTitle.style.color = '#1a1a1a';
     transcriptTitle.textContent = 'やり取り';
     transcriptSection.appendChild(transcriptTitle);
 
@@ -504,24 +521,26 @@ export function showInterviewDetails(interview) {
     const transcript = Array.isArray(interview.transcript) ? interview.transcript : [];
     if (transcript.length === 0) {
         const empty = document.createElement('p');
-        empty.className = 'text-sm text-slate-500';
+        empty.className = 'text-sm';
+        empty.style.color = '#9a9a9a';
         empty.textContent = '記録がありません。';
         transcriptBody.appendChild(empty);
     } else {
         transcript.forEach((entry) => {
             if (!entry || !entry.role) return;
             const row = document.createElement('div');
-            row.className = `rounded-xl px-4 py-3 border shadow-sm ${entry.role === 'ai'
-                ? 'border-blue-200 bg-blue-50'
-                : 'border-slate-200 bg-slate-100'
-                }`;
+            row.className = 'rounded-lg px-4 py-3';
+            row.style.cssText = entry.role === 'ai'
+                ? 'background:#f5f2ed; border:1px solid #e0dcd5;'
+                : 'background:#ffffff; border:1px solid #e0dcd5;';
             const roleLabel = entry.role === 'ai' ? 'AI面接官' : 'あなた';
             const role = document.createElement('p');
-            role.className = `text-xs font-semibold ${entry.role === 'ai' ? 'text-blue-600' : 'text-slate-600'
-                }`;
+            role.className = 'text-xs font-semibold';
+            role.style.color = entry.role === 'ai' ? '#c85a3a' : '#5c5c5c';
             role.textContent = roleLabel;
             const content = document.createElement('p');
-            content.className = 'text-sm text-slate-700 whitespace-pre-wrap leading-relaxed mt-2';
+            content.className = 'text-sm whitespace-pre-wrap leading-relaxed mt-2';
+            content.style.color = '#1a1a1a';
             content.appendChild(createTextFragment(entry.content ?? ''));
             row.append(role, content);
 
@@ -543,7 +562,8 @@ export function showInterviewDetails(interview) {
 
             if (entry.timestamp) {
                 const time = document.createElement('p');
-                time.className = 'text-[11px] text-slate-400 mt-2';
+                time.className = 'text-[11px] mt-2';
+                time.style.color = '#9a9a9a';
                 time.textContent = `記録日時: ${formatDateToJst(entry.timestamp)}`;
                 row.appendChild(time);
             }
@@ -557,10 +577,12 @@ export function showInterviewDetails(interview) {
         const summarySection = document.createElement('div');
         summarySection.className = 'space-y-3';
         const summaryTitle = document.createElement('h4');
-        summaryTitle.className = 'text-sm font-semibold text-slate-900';
+        summaryTitle.className = 'text-sm font-bold';
+        summaryTitle.style.color = '#1a1a1a';
         summaryTitle.textContent = 'サマリーレポート';
         const summaryContent = document.createElement('p');
-        summaryContent.className = 'text-sm text-slate-700 whitespace-pre-wrap leading-relaxed bg-slate-50 border border-slate-200 rounded-xl px-4 py-3';
+        summaryContent.className = 'text-sm whitespace-pre-wrap leading-relaxed rounded-lg px-4 py-3';
+        summaryContent.style.cssText = 'color:#1a1a1a; background:#f5f2ed; border:1px solid #e0dcd5;';
         summaryContent.appendChild(createTextFragment(summaryData.text || 'サマリーがありません。'));
         summarySection.append(summaryTitle, summaryContent);
 
@@ -575,7 +597,8 @@ export function showInterviewDetails(interview) {
         }
         if (summaryMetaParts.length) {
             const statsLine = document.createElement('p');
-            statsLine.className = 'text-xs text-slate-500';
+            statsLine.className = 'text-xs';
+            statsLine.style.color = '#9a9a9a';
             statsLine.textContent = summaryMetaParts.join(' / ');
             summarySection.appendChild(statsLine);
         }
@@ -586,19 +609,22 @@ export function showInterviewDetails(interview) {
         const visibleSkills = skillEntries.filter(([, value]) => Number.isFinite(Number(value)) && Number(value) > 0);
         if (visibleSkills.length) {
             const skillsGrid = document.createElement('div');
-            skillsGrid.className = 'grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs text-slate-600';
+            skillsGrid.className = 'grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs';
             DASHBOARD_SKILLS.forEach((skillKey) => {
                 const scoreValue = Number(summaryData.skills?.[skillKey]);
                 if (!Number.isFinite(scoreValue)) {
                     return;
                 }
                 const card = document.createElement('div');
-                card.className = 'bg-slate-100 rounded-lg px-3 py-2 flex flex-col gap-1';
+                card.className = 'rounded-lg px-3 py-2 flex flex-col gap-1';
+                card.style.cssText = 'background:#f5f2ed; border:1px solid #e0dcd5;';
                 const label = document.createElement('span');
-                label.className = 'font-medium text-slate-600';
+                label.className = 'font-semibold uppercase';
+                label.style.cssText = 'color:#9a9a9a; letter-spacing:0.06em; font-size:0.65rem;';
                 label.textContent = SKILL_LABELS[skillKey] || skillKey;
                 const score = document.createElement('span');
-                score.className = 'text-base font-semibold text-slate-800';
+                score.className = 'text-base font-bold';
+                score.style.color = '#1a1a1a';
                 score.textContent = formatScore(scoreValue);
                 card.append(label, score);
                 skillsGrid.appendChild(card);

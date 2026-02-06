@@ -39,16 +39,15 @@ export function renderProfile() {
     }
     if (profileStatusBadgeEl) {
         const baseClass = 'inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold';
-        const statusClass = profile.status === '内定'
-            ? 'bg-emerald-100 text-emerald-700'
-            : profile.status === '最終面接'
-                ? 'bg-indigo-100 text-indigo-700'
-                : profile.status === '二次面接'
-                    ? 'bg-purple-100 text-purple-700'
-                    : profile.status === '一次面接'
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'bg-slate-200 text-slate-700';
-        profileStatusBadgeEl.className = `${baseClass} ${statusClass}`;
+        const statusStyle = profile.status === '内定'
+            ? 'background:rgba(58,125,92,0.1); color:#3a7d5c; border:1px solid rgba(58,125,92,0.2);'
+            : profile.status === '最終面接' || profile.status === '二次面接'
+                ? 'background:rgba(200,90,58,0.08); color:#c85a3a; border:1px solid rgba(200,90,58,0.15);'
+                : profile.status === '一次面接'
+                    ? 'background:rgba(26,26,26,0.06); color:#1a1a1a; border:1px solid rgba(26,26,26,0.1);'
+                    : 'background:#f5f2ed; color:#5c5c5c; border:1px solid #e0dcd5;';
+        profileStatusBadgeEl.className = baseClass;
+        profileStatusBadgeEl.style.cssText = statusStyle;
         profileStatusBadgeEl.textContent = profile.status || '未設定';
     }
     if (profileStatusDescriptionEl) {

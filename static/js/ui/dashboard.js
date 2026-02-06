@@ -163,12 +163,12 @@ export function renderDashboard(history = [], stats = null) {
                             skillValues.expression,
                         ],
                         fill: true,
-                        backgroundColor: 'rgba(139, 92, 246, 0.2)',
-                        borderColor: 'rgba(139, 92, 246, 1)',
-                        pointBackgroundColor: 'rgba(139, 92, 246, 1)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgba(139, 92, 246, 1)',
+                        backgroundColor: 'rgba(200, 90, 58, 0.1)',
+                        borderColor: 'rgba(200, 90, 58, 0.8)',
+                        pointBackgroundColor: '#c85a3a',
+                        pointBorderColor: '#ffffff',
+                        pointHoverBackgroundColor: '#ffffff',
+                        pointHoverBorderColor: '#c85a3a',
                     },
                 ],
             },
@@ -177,12 +177,12 @@ export function renderDashboard(history = [], stats = null) {
                 responsive: true,
                 scales: {
                     r: {
-                        angleLines: { color: 'rgba(148, 163, 184, 0.2)' },
-                        grid: { color: 'rgba(148, 163, 184, 0.2)' },
-                        pointLabels: { font: { size: 12 }, color: '#475569' },
+                        angleLines: { color: 'rgba(224, 220, 213, 0.6)' },
+                        grid: { color: 'rgba(224, 220, 213, 0.6)' },
+                        pointLabels: { font: { size: 12 }, color: '#5c5c5c' },
                         ticks: {
                             backdropColor: 'transparent',
-                            color: '#64748b',
+                            color: '#9a9a9a',
                             stepSize: 20,
                         },
                         suggestedMin: 0,
@@ -194,10 +194,10 @@ export function renderDashboard(history = [], stats = null) {
                         display: false,
                     },
                     tooltip: {
-                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                        titleColor: '#f8fafc',
-                        bodyColor: '#f8fafc',
-                        borderColor: 'rgba(255, 255, 255, 0.1)',
+                        backgroundColor: '#1a1a1a',
+                        titleColor: '#f5f2ed',
+                        bodyColor: '#f5f2ed',
+                        borderColor: 'rgba(224, 220, 213, 0.2)',
                         borderWidth: 1,
                         callbacks: {
                             label(context) {
@@ -226,16 +226,19 @@ export function renderDashboard(history = [], stats = null) {
                 const createdAt = item.createdAt || item.created_at;
                 const li = document.createElement('li');
                 li.className =
-                    'flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer border border-gray-100';
+                    'flex items-center justify-between p-3 rounded-lg cursor-pointer';
+                li.style.cssText = 'background:#f5f2ed; border:1px solid #e0dcd5; transition:background 0.15s ease;';
+                li.addEventListener('mouseenter', () => { li.style.background = '#ece8e1'; });
+                li.addEventListener('mouseleave', () => { li.style.background = '#f5f2ed'; });
                 li.innerHTML = `
     <div>
-              <p class="text-sm font-medium text-gray-800">${formatDateToJst(createdAt)}</p>
-              <p class="text-xs text-gray-500 mt-1">
+              <p class="text-sm font-medium" style="color:#1a1a1a;">${formatDateToJst(createdAt)}</p>
+              <p class="text-xs mt-1" style="color:#9a9a9a;">
                 タイプ: ${item.setup?.interviewType || 'N/A'} / モード: ${item.mode === 'interview' ? '面接' : '訓練'}${scoreText}
               </p>
             </div>
-    <span class="text-gray-400">
-        <i class="lucide-icon w-5 h-5" data-lucide="chevron-right" aria-hidden="true"></i>
+    <span style="color:#9a9a9a;">
+        <i class="lucide-icon w-4 h-4" data-lucide="chevron-right" aria-hidden="true"></i>
     </span>
 `;
                 li.addEventListener('click', () => showInterviewDetails(item));
@@ -260,7 +263,8 @@ export function renderHistoryList(items = []) {
     items.forEach((item) => {
         const summary = normalizeSummary(item.summaryReport);
         const li = document.createElement('li');
-        li.className = 'bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100 space-y-4 cursor-pointer hover:shadow-md transition-shadow';
+        li.className = 'p-4 sm:p-5 rounded-xl space-y-4 cursor-pointer transition-shadow';
+        li.style.cssText = 'background:#ffffff; border:1px solid #e0dcd5; box-shadow:0 1px 2px rgba(0,0,0,0.04);';
         li.tabIndex = 0;
         li.setAttribute('role', 'button');
         li.addEventListener('click', (e) => {
@@ -278,27 +282,30 @@ export function renderHistoryList(items = []) {
         headerRow.className = 'flex items-center justify-between';
 
         const dateEl = document.createElement('p');
-        dateEl.className = 'flex items-center text-sm font-medium text-gray-700';
-        dateEl.innerHTML = `${iconMarkup('calendar', 'w-4 h-4 mr-2 text-gray-500')}${formatDateToJst(item.createdAt || item.created_at)} `;
+        dateEl.className = 'flex items-center text-sm font-medium';
+        dateEl.style.color = '#1a1a1a';
+        dateEl.innerHTML = `${iconMarkup('calendar', 'w-4 h-4 mr-2')}${formatDateToJst(item.createdAt || item.created_at)} `;
 
         const rightHeader = document.createElement('div');
         rightHeader.className = 'flex items-center gap-4';
 
         if (item.mode === 'interview' && summary && Number.isFinite(Number(summary.score))) {
             const score = Math.round(Number(summary.score));
-            let scoreColor = 'text-green-600 bg-green-100';
-            if (score < 80) scoreColor = 'text-yellow-600 bg-yellow-100';
-            if (score < 60) scoreColor = 'text-red-600 bg-red-100';
             const scoreBadge = document.createElement('span');
-            scoreBadge.className = `flex items-center text-sm font-semibold ${scoreColor} px-2.5 py-0.5 rounded-full`;
-            scoreBadge.innerHTML = `${iconMarkup('award', 'w-4 h-4 mr-1.5')} スコア: ${score} 点`;
+            scoreBadge.className = 'flex items-center text-sm font-semibold px-2.5 py-0.5 rounded-full';
+            scoreBadge.style.cssText = score >= 80
+                ? 'background:rgba(58,125,92,0.1); color:#3a7d5c;'
+                : score >= 60
+                    ? 'background:rgba(200,90,58,0.1); color:#c85a3a;'
+                    : 'background:rgba(192,57,43,0.1); color:#c0392b;';
             scoreBadge.innerHTML = `${iconMarkup('award', 'w-4 h-4 mr-1.5')} スコア: ${score} 点`;
             rightHeader.appendChild(scoreBadge);
         }
 
         const chevron = document.createElement('span');
-        chevron.className = 'text-gray-400 ml-2';
-        chevron.innerHTML = iconMarkup('chevron-right', 'w-5 h-5');
+        chevron.className = 'ml-2';
+        chevron.style.color = '#9a9a9a';
+        chevron.innerHTML = iconMarkup('chevron-right', 'w-4 h-4');
         rightHeader.appendChild(chevron);
 
         // const detailsBtn = document.createElement('button');
@@ -312,7 +319,8 @@ export function renderHistoryList(items = []) {
         li.appendChild(headerRow);
 
         const detailsGrid = document.createElement('div');
-        detailsGrid.className = 'grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-5 pt-4 border-t border-gray-100';
+        detailsGrid.className = 'grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-4 pt-4';
+        detailsGrid.style.borderTop = '1px solid #e0dcd5';
 
         const durationMinutes =
             summary && Number.isFinite(Number(summary.durationSeconds))
@@ -323,21 +331,21 @@ export function renderHistoryList(items = []) {
             : 0;
 
         const details = [
-            { icon: 'message-square', label: 'タイプ', value: item.setup?.interviewType || 'N/A', color: 'text-indigo-500' },
-            { icon: 'briefcase', label: '志望業界 & 職種', value: item.setup?.targetIndustry || 'N/A', color: 'text-amber-500' },
-            { icon: 'clock', label: '所要時間', value: `${durationMinutes} 分`, color: 'text-blue-500' },
-            { icon: 'list', label: '質問数', value: `${questionCount} 問`, color: 'text-emerald-500' },
+            { icon: 'message-square', label: 'タイプ', value: item.setup?.interviewType || 'N/A' },
+            { icon: 'briefcase', label: '志望業界 & 職種', value: item.setup?.targetIndustry || 'N/A' },
+            { icon: 'clock', label: '所要時間', value: `${durationMinutes} 分` },
+            { icon: 'list', label: '質問数', value: `${questionCount} 問` },
         ];
 
         details.forEach((detail) => {
             const detailEl = document.createElement('div');
             detailEl.className = 'text-sm';
             detailEl.innerHTML = `
-    <p class="flex items-center text-gray-500 font-medium">
-        ${iconMarkup(detail.icon, `w-4 h-4 mr-2 ${detail.color || 'text-gray-500'}`)}
+    <p class="flex items-center font-medium" style="color:#9a9a9a;">
+        ${iconMarkup(detail.icon, 'w-3.5 h-3.5 mr-2')}
 <span>${detail.label}</span>
           </p>
-    <p class="font-semibold text-gray-800 mt-1 pl-6">${detail.value}</p>
+    <p class="font-semibold mt-1 pl-5" style="color:#1a1a1a;">${detail.value}</p>
 `;
             detailsGrid.appendChild(detailEl);
         });
@@ -345,15 +353,16 @@ export function renderHistoryList(items = []) {
         li.appendChild(detailsGrid);
 
         const footerEl = document.createElement('div');
-        footerEl.className = 'pt-3 border-t border-gray-100 flex items-center justify-between';
+        footerEl.className = 'pt-3 flex items-center justify-between';
+        footerEl.style.borderTop = '1px solid #e0dcd5';
         const isInterviewMode = item.mode === 'interview';
-        const badgeClass = isInterviewMode
-            ? 'text-blue-50 bg-gradient-to-r from-indigo-500 to-blue-500 border border-indigo-200'
-            : 'text-emerald-900 bg-gradient-to-r from-emerald-200 to-emerald-100 border border-emerald-200';
+        const badgeStyle = isInterviewMode
+            ? 'background:#1a1a1a; color:#f5f2ed;'
+            : 'background:rgba(200,90,58,0.08); color:#c85a3a; border:1px solid rgba(200,90,58,0.15);';
         const modeText = isInterviewMode ? '面接モード' : '訓練モード';
         footerEl.innerHTML = `
-    <span class="text-xs font-semibold px-3 py-1 rounded-full inline-flex items-center gap-2 ${badgeClass}">
-        ${iconMarkup(isInterviewMode ? 'users' : 'graduation-cap', 'w-4 h-4')}
+    <span class="text-xs font-semibold px-3 py-1 rounded-full inline-flex items-center gap-2" style="${badgeStyle}">
+        ${iconMarkup(isInterviewMode ? 'users' : 'graduation-cap', 'w-3.5 h-3.5')}
           ${modeText}
         </span>
     `;
