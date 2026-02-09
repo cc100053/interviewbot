@@ -432,12 +432,12 @@ export async function handleEndInterview() {
                 method: 'POST',
                 skipStatus: true,
             });
-            const summaryText = result?.summary || 'サマリーを取得できませんでした。';
+            const summaryPayload = result?.summaryReport || { text: result?.summary || 'サマリーを取得できませんでした。' };
             resetInterviewState();
             document.dispatchEvent(new CustomEvent('request-switch-view', { detail: { viewName: 'app' } }));
             document.dispatchEvent(new CustomEvent('request-switch-tab', { detail: { tabId: 'top-page-view' } }));
             await refreshHistory();
-            showSummaryModal(summaryText);
+            showSummaryModal(summaryPayload);
             showToast('面接モードを終了しました。', 'info');
         } catch (error) {
             showToast(error.message || 'サマリーの生成に失敗しました。', 'error');

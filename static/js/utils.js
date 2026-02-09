@@ -83,7 +83,11 @@ export function formatTotalTime(totalMinutes) {
 
 export function formatDateToJst(isoString) {
     if (!isoString) return '';
-    const date = new Date(isoString);
+    const raw = String(isoString).trim();
+    if (!raw) return '';
+    const hasExplicitTimezone = /([zZ]|[+-]\d{2}:\d{2})$/.test(raw);
+    const parseTarget = hasExplicitTimezone ? raw : `${raw}Z`;
+    const date = new Date(parseTarget);
     if (Number.isNaN(date.getTime())) return '';
     return new Intl.DateTimeFormat('ja-JP', {
         timeZone: 'Asia/Tokyo',

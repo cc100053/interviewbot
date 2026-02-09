@@ -248,11 +248,17 @@ def _normalise_summary_record(summary: Any) -> Optional[Dict[str, Any]]:
         if text_value:
             normalised["text"] = str(text_value).strip()
 
-        score_value = _clamp_percentage(_coerce_float(data.get("score") or data.get("overallScore")))
+        score_candidate = data.get("score")
+        if score_candidate is None:
+            score_candidate = data.get("overallScore")
+        score_value = _clamp_percentage(_coerce_float(score_candidate))
         if score_value is not None:
             normalised["score"] = score_value
 
-        duration_value = _coerce_int(data.get("durationSeconds") or data.get("duration_seconds"))
+        duration_candidate = data.get("durationSeconds")
+        if duration_candidate is None:
+            duration_candidate = data.get("duration_seconds")
+        duration_value = _coerce_int(duration_candidate)
         if duration_value is not None and duration_value >= 0:
             normalised["durationSeconds"] = duration_value
 

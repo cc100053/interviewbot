@@ -388,6 +388,9 @@ function bootstrap() {
             switchTab(e.detail.tabId);
         }
     });
+    document.addEventListener('recording-state-changed', () => {
+        applyControlState();
+    });
 
     initialiseAuthTabs();
     initialiseEventHandlers();

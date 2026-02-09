@@ -107,7 +107,7 @@ function floatTo16BitPCM(floatBuffer) {
 
 export function setRecordingState(isRecording) {
     state.isRecording = isRecording;
-    const recordButtonEl = document.getElementById('record-btn');
+    const recordButtonEl = document.getElementById('record-voice-btn');
     const listeningIndicatorEl = document.getElementById('listening-indicator');
 
     if (recordButtonEl) {

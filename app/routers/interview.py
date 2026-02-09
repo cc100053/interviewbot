@@ -1,6 +1,6 @@
 import logging
 import math
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from uuid import uuid4
@@ -23,6 +23,10 @@ logger = logging.getLogger(__name__)
 
 DEBUG_AUDIO_DIR = Path("tmp/audio_debug")
 DEBUG_AUDIO_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def _utc_now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
 def _feedback_snippet(text: Optional[str]) -> Optional[str]:
@@ -125,6 +129,7 @@ class DashboardStats(BaseModel):
 
 class InterviewFinishResponse(BaseModel):
     summary: str
+    summary_report: Optional[Dict[str, Any]] = Field(None, alias="summaryReport")
 
     class Config:
         allow_population_by_field_name = True
@@ -164,7 +169,7 @@ def _parse_timestamp(value: Any) -> Optional[datetime]:
         return None
     if isinstance(value, (int, float)):
         try:
-            return datetime.fromtimestamp(float(value))
+            return datetime.fromtimestamp(float(value), tz=timezone.utc)
         except (OSError, ValueError):
             return None
     if isinstance(value, str):
@@ -172,11 +177,14 @@ def _parse_timestamp(value: Any) -> Optional[datetime]:
         if not text:
             return None
         try:
-            return datetime.fromisoformat(text.replace("Z", "+00:00"))
+            parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
+            if parsed.tzinfo is None:
+                return parsed.replace(tzinfo=timezone.utc)
+            return parsed.astimezone(timezone.utc)
         except ValueError:
             for pattern in ("%Y-%m-%d %H:%M:%S", "%Y/%m/%d %H:%M:%S"):
                 try:
-                    return datetime.strptime(text, pattern)
+                    return datetime.strptime(text, pattern).replace(tzinfo=timezone.utc)
                 except ValueError:
                     continue
     return None
@@ -264,7 +272,7 @@ async def start_interview(
     mode = (request.mode or "training").lower()
     if mode not in {"training", "interview"}:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid mode selected.")
-    created_at = datetime.utcnow().isoformat(timespec="seconds")
+    created_at = _utc_now_iso()
     transcript = []
     if initial_question:
         ai_entry = {
@@ -307,7 +315,7 @@ async def process_answer(
     interview = _get_user_interview_or_404(db, request.interview_id, user)
 
     mode = (interview.get("mode") or "training").lower()
-    timestamp = datetime.utcnow().isoformat(timespec="seconds")
+    timestamp = _utc_now_iso()
 
     if mode == "interview":
         transcript = _ensure_chat_transcript(interview.get("transcript", []))
@@ -330,7 +338,7 @@ async def process_answer(
             "role": "ai",
             "content": ai_result["ai_message_text"],
             "type": "question",
-            "timestamp": datetime.utcnow().isoformat(timespec="seconds"),
+            "timestamp": _utc_now_iso(),
         }
         if ai_result.get("next_question_audio_url"):
             ai_entry["audioUrl"] = ai_result.get("next_question_audio_url")
@@ -401,7 +409,7 @@ def chat_endpoint(
 
     mode = (interview.get("mode") or "training").lower()
     transcript = _ensure_chat_transcript(interview.get("transcript", []))
-    user_timestamp = datetime.utcnow().isoformat(timespec="seconds")
+    user_timestamp = _utc_now_iso()
 
     user_entry = {
         "role": "user",
@@ -418,7 +426,7 @@ def chat_endpoint(
         db.update_interview(interview_id, {"transcript": transcript})
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="AIサービスの呼び出しに失敗しました。")
 
-    timestamp = datetime.utcnow().isoformat(timespec="seconds")
+    timestamp = _utc_now_iso()
     ai_message_text = ai_result.get("ai_message_text", "")
     ai_audio_url = ai_result.get("ai_audio_url") or ""
 
@@ -494,7 +502,7 @@ async def process_audio_answer(
     if not audio_bytes:
         audio_bytes = b""
     mode = (interview.get("mode") or "training").lower()
-    timestamp = datetime.utcnow().isoformat(timespec="seconds")
+    timestamp = _utc_now_iso()
 
     if mode == "interview":
         transcript = _ensure_chat_transcript(interview.get("transcript", []))
@@ -520,7 +528,7 @@ async def process_audio_answer(
             "role": "ai",
             "content": ai_result["ai_message_text"],
             "type": "question",
-            "timestamp": datetime.utcnow().isoformat(timespec="seconds"),
+            "timestamp": _utc_now_iso(),
         }
         if ai_result.get("next_question_audio_url"):
             ai_entry["audioUrl"] = ai_result.get("next_question_audio_url")
@@ -613,7 +621,9 @@ async def get_dashboard_stats(
     for interview in interviews:
         summary = _extract_summary_data(interview.get("summary_report"))
         if summary:
-            score = summary.get("score") or summary.get("overallScore")
+            score = summary.get("score")
+            if score is None:
+                score = summary.get("overallScore")
             if score is not None:
                 try:
                     score_value = float(score)
@@ -623,7 +633,9 @@ async def get_dashboard_stats(
                     total_scores += score_value
                     score_count += 1
 
-            duration_value = summary.get("durationSeconds") or summary.get("duration_seconds")
+            duration_value = summary.get("durationSeconds")
+            if duration_value is None:
+                duration_value = summary.get("duration_seconds")
             duration_seconds = None
             if duration_value is not None:
                 try:
@@ -690,7 +702,9 @@ async def finish_interview(
     normalised_summary = _extract_summary_data(summary_data) or {"text": str(summary_payload or "")}
     if not isinstance(normalised_summary.get("skills"), dict):
         normalised_summary["skills"] = {}
-    duration_value = normalised_summary.get("durationSeconds") or normalised_summary.get("duration_seconds")
+    duration_value = normalised_summary.get("durationSeconds")
+    if duration_value is None:
+        duration_value = normalised_summary.get("duration_seconds")
     if duration_value is not None:
         try:
             normalised_summary["durationSeconds"] = max(0, int(duration_value))
@@ -699,7 +713,7 @@ async def finish_interview(
     normalised_summary.pop("duration_seconds", None)
     db.update_interview(interview_id, {"summary_report": normalised_summary})
     summary_text = normalised_summary.get("text") or "面接のサマリーを生成できませんでした。"
-    return InterviewFinishResponse(summary=summary_text)
+    return InterviewFinishResponse(summary=summary_text, summaryReport=normalised_summary)
 
 
 @router.delete("/clear")
