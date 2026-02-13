@@ -56,3 +56,23 @@ class GeminiKeyManager:
         """Return the current key index."""
         with self._lock:
             return self._index
+
+    def get_keys_cycle_from_next(self) -> list[tuple[int, str]]:
+        """Return all keys starting from the *next* index (round-robin order).
+
+        Each element is (index, key).  The list length equals ``key_count``
+        and covers every key exactly once, starting from the key *after* the
+        current one.
+        """
+        if not self._keys:
+            return []
+        with self._lock:
+            n = len(self._keys)
+            start = (self._index + 1) % n
+            return [(i % n, self._keys[i % n]) for i in range(start, start + n)]
+
+    def set_index(self, index: int) -> None:
+        """Set the current key index (used after a successful retry)."""
+        with self._lock:
+            if self._keys:
+                self._index = index % len(self._keys)
