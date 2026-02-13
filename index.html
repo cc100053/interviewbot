@@ -27,17 +27,17 @@
 
         <!-- Left: Editorial Hero -->
         <div class="lg:w-1/2 p-10 sm:p-14 flex flex-col justify-between"
-             style="background:#1a1a1a; border-radius:1.25rem 0 0 1.25rem;">
+             style="background:#f4f4f5; border-radius:1.25rem 0 0 1.25rem; border:1px solid #e5e5e5; border-right:none;">
           <div>
             <div class="mb-10">
-              <img src="static/photo/logo1.png" alt="ポケメン ロゴ" class="h-10 w-auto brightness-0 invert" />
+              <img src="static/photo/logo1.png" alt="ポケメン ロゴ" class="h-10 w-auto" />
             </div>
 
             <h2 class="text-3xl sm:text-4xl font-bold leading-tight mb-5"
-                style="color:#f5f2ed; letter-spacing:-0.025em;">
+                style="color:#1e1e1e; letter-spacing:-0.02em;">
               面接力を、<br>確かなものに。
             </h2>
-            <p class="text-base mb-10 leading-relaxed" style="color:#b0aca5;">
+            <p class="text-base mb-10 leading-relaxed" style="color:#6b6b6b;">
               本番さながらの対話で練習し、<br>
               客観的なフィードバックで成長を実感する。
             </p>
@@ -45,38 +45,38 @@
             <div class="space-y-6">
               <div class="flex items-start gap-4">
                 <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
-                     style="background:rgba(200,90,58,0.15);">
-                  <i data-lucide="bar-chart-3" class="w-5 h-5" style="color:#c85a3a;"></i>
+                     style="background:rgba(224,100,56,0.08);">
+                  <i data-lucide="bar-chart-3" class="w-5 h-5" style="color:#e06438;"></i>
                 </div>
                 <div>
-                  <h3 class="font-semibold text-base" style="color:#f5f2ed;">定量的なスキル分析</h3>
-                  <p class="text-sm mt-0.5" style="color:#8a8680;">論理構成・具体性・表現力を数値で可視化</p>
+                  <h3 class="font-semibold text-base" style="color:#1e1e1e;">定量的なスキル分析</h3>
+                  <p class="text-sm mt-0.5" style="color:#a3a3a3;">論理構成・具体性・表現力を数値で可視化</p>
                 </div>
               </div>
               <div class="flex items-start gap-4">
                 <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
-                     style="background:rgba(200,90,58,0.15);">
-                  <i data-lucide="mic" class="w-5 h-5" style="color:#c85a3a;"></i>
+                     style="background:rgba(224,100,56,0.08);">
+                  <i data-lucide="mic" class="w-5 h-5" style="color:#e06438;"></i>
                 </div>
                 <div>
-                  <h3 class="font-semibold text-base" style="color:#f5f2ed;">音声対話モード</h3>
-                  <p class="text-sm mt-0.5" style="color:#8a8680;">リアルタイム音声認識で、実践的な受け答え</p>
+                  <h3 class="font-semibold text-base" style="color:#1e1e1e;">音声対話モード</h3>
+                  <p class="text-sm mt-0.5" style="color:#a3a3a3;">リアルタイム音声認識で、実践的な受け答え</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <p class="text-xs mt-10" style="color:#5c5c5c;">
+          <p class="text-xs mt-10" style="color:#a3a3a3;">
             &copy; 2025 ポケメン. All rights reserved.
           </p>
         </div>
 
         <!-- Right: Auth Form -->
         <div class="lg:w-1/2 p-8 sm:p-14 flex flex-col justify-center"
-             style="background:#ffffff; border-radius:0 1.25rem 1.25rem 0; border:1px solid #e0dcd5; border-left:none;">
+             style="background:#ffffff; border-radius:0 1.25rem 1.25rem 0; border:1px solid #e5e5e5; border-left:none;">
           <div class="max-w-sm mx-auto w-full">
-            <h2 class="text-2xl font-bold mb-1" style="color:#1a1a1a;">おかえりなさい</h2>
-            <p class="text-sm mb-8" style="color:#5c5c5c;">アカウント情報を入力してログインしてください</p>
+            <h2 class="text-2xl font-bold mb-1" style="color:#1e1e1e;">おかえりなさい</h2>
+            <p class="text-sm mb-8" style="color:#6b6b6b;">アカウント情報を入力してログインしてください</p>
 
             <div class="flex justify-center mb-8">
               <div class="nav-pill-container w-full">
@@ -88,13 +88,13 @@
             <form id="login-form" method="post" class="space-y-5">
               <div>
                 <label for="login-userid" class="block text-xs font-semibold uppercase tracking-wider mb-2"
-                       style="color:#5c5c5c; letter-spacing:0.08em;">ユーザーID</label>
+                       style="color:#6b6b6b; letter-spacing:0.08em;">ユーザーID</label>
                 <input id="login-userid" name="userId" type="text" required class="input-field"
                   placeholder="your_username" />
               </div>
               <div>
                 <label for="login-password" class="block text-xs font-semibold uppercase tracking-wider mb-2"
-                       style="color:#5c5c5c; letter-spacing:0.08em;">パスワード</label>
+                       style="color:#6b6b6b; letter-spacing:0.08em;">パスワード</label>
                 <input id="login-password" name="password" type="password" required minlength="8" class="input-field"
                   placeholder="--------" />
               </div>
@@ -107,10 +107,10 @@
               <button type="submit" class="primary-button w-full mt-2">
                 ログイン <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
               </button>
-              <p class="text-center text-sm mt-6" style="color:#5c5c5c;">
+              <p class="text-center text-sm mt-6" style="color:#6b6b6b;">
                 アカウントをお持ちでないですか？
                 <button type="button" id="go-to-signup"
-                  class="font-semibold transition-colors" style="color:#c85a3a;">
+                  class="font-semibold transition-colors" style="color:#e06438;">
                   新規作成
                 </button>
               </p>
@@ -133,13 +133,13 @@
                 class="hidden p-3 text-sm rounded-lg" role="alert"
                 style="background:#fef2f2; border:1px solid #f0d0cc; color:#c0392b;">
                 <span class="font-medium">登録失敗:</span>
-                <span id="signup-error-text">このIDは既に使用されています。</span>
+                <span id="signup-error-text">このIDは既���使用されています。</span>
               </div>
               <button type="submit" class="primary-button w-full mt-2">アカウント作成</button>
-              <p class="text-center text-sm mt-6" style="color:#5c5c5c;">
+              <p class="text-center text-sm mt-6" style="color:#6b6b6b;">
                 すでにアカウントをお持ちですか？
                 <button type="button" id="go-to-login"
-                  class="font-semibold transition-colors" style="color:#c85a3a;">ログイン</button>
+                  class="font-semibold transition-colors" style="color:#e06438;">ログイン</button>
               </p>
             </form>
           </div>
@@ -156,23 +156,23 @@
     <!-- Header -->
     <header id="app-header"
       class="sticky top-4 z-40 mb-6 rounded-xl px-5 py-3.5 flex items-center justify-between"
-      style="background:#ffffff; border:1px solid #e0dcd5; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+      style="background:rgba(255,255,255,0.92); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid #e5e5e5; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
       <a href="#" id="logo-link" class="inline-flex items-center gap-3 hover:opacity-80 transition-opacity">
         <img src="static/photo/logo1.png" alt="ポケメン ロゴ" class="h-7 w-auto" />
       </a>
       <div class="flex items-center gap-3">
         <div id="status-indicator"
           class="hidden flex items-center gap-2 rounded-full px-3 py-1.5 text-xs"
-          style="background:#f5f2ed; border:1px solid #e0dcd5; color:#5c5c5c;">
+          style="background:#f4f4f5; border:1px solid #e5e5e5; color:#5c5c5c;">
           <span class="w-1.5 h-1.5 rounded-full animate-pulse" style="background:#c85a3a;"></span>
           <span id="status-text">処理中...</span>
         </div>
         <button id="open-menu-btn" type="button"
           class="hidden inline-flex items-center justify-center rounded-full p-0.5 hover:ring-2 transition-all"
-          style="--tw-ring-color:rgba(200,90,58,0.3);">
+          style="--tw-ring-color:rgba(224,100,56,0.3);">
           <span class="sr-only">メニューを開く</span>
           <img id="header-profile-avatar" src="static/photo/default.png" alt="メニュー"
-            class="w-9 h-9 rounded-full object-cover" style="border:2px solid #e0dcd5;" />
+            class="w-9 h-9 rounded-full object-cover" style="border:2px solid #e5e5e5;" />
         </button>
       </div>
     </header>
@@ -206,17 +206,17 @@
                 <div class="glass-card p-5 flex items-center justify-between">
                   <div>
                     <p class="text-xs font-semibold uppercase tracking-wider" style="color:#9a9a9a; letter-spacing:0.08em;">総練習回数</p>
-                    <p id="stat-sessions" class="text-3xl font-bold mt-1" style="color:#1a1a1a;">0</p>
+                    <p id="stat-sessions" class="text-3xl font-bold mt-1" style="color:#1e1e1e;">0</p>
                   </div>
-                  <div class="w-10 h-10 flex items-center justify-center rounded-lg" style="background:rgba(200,90,58,0.08);">
-                    <i data-lucide="target" class="w-5 h-5" style="color:#c85a3a;"></i>
+                  <div class="w-10 h-10 flex items-center justify-center rounded-lg" style="background:rgba(224,100,56,0.08);">
+                    <i data-lucide="target" class="w-5 h-5" style="color:#e06438;"></i>
                   </div>
                 </div>
 
                 <div class="glass-card p-5 flex items-center justify-between">
                   <div>
                     <p class="text-xs font-semibold uppercase tracking-wider" style="color:#9a9a9a; letter-spacing:0.08em;">平均スコア</p>
-                    <p id="stat-avg-score" class="text-3xl font-bold mt-1" style="color:#1a1a1a;">0</p>
+                    <p id="stat-avg-score" class="text-3xl font-bold mt-1" style="color:#1e1e1e;">0</p>
                   </div>
                   <div class="w-10 h-10 flex items-center justify-center rounded-lg" style="background:rgba(58,125,92,0.08);">
                     <i data-lucide="trending-up" class="w-5 h-5" style="color:#3a7d5c;"></i>
@@ -226,10 +226,10 @@
                 <div class="glass-card p-5 flex items-center justify-between">
                   <div>
                     <p class="text-xs font-semibold uppercase tracking-wider" style="color:#9a9a9a; letter-spacing:0.08em;">練習時間</p>
-                    <p id="stat-total-time" class="text-3xl font-bold mt-1" style="color:#1a1a1a;">0h</p>
+                    <p id="stat-total-time" class="text-3xl font-bold mt-1" style="color:#1e1e1e;">0h</p>
                   </div>
                   <div class="w-10 h-10 flex items-center justify-center rounded-lg" style="background:rgba(26,26,26,0.06);">
-                    <i data-lucide="clock" class="w-5 h-5" style="color:#1a1a1a;"></i>
+                    <i data-lucide="clock" class="w-5 h-5" style="color:#1e1e1e;"></i>
                   </div>
                 </div>
               </div>
@@ -237,8 +237,8 @@
               <!-- Radar Chart Section -->
               <div class="glass-card p-6 md:p-8">
                 <div class="mb-6">
-                  <h3 class="text-lg font-bold" style="color:#1a1a1a;">スキル分析</h3>
-                  <p class="text-sm mt-0.5" style="color:#9a9a9a;">各スキルの客観的な評価レポート</p>
+                  <h3 class="text-lg font-bold" style="color:#1e1e1e;">スキル分析</h3>
+                  <p class="text-sm mt-0.5" style="color:#a3a3a3;">各スキルの客観的な評価レポート</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
@@ -247,53 +247,53 @@
                   </div>
 
                   <div class="grid grid-cols-2 gap-3">
-                    <div class="p-4 rounded-lg" style="background:#f5f2ed; border:1px solid #e0dcd5;">
-                      <p class="text-xs font-semibold uppercase tracking-wider mb-1" style="color:#9a9a9a;">論理構成力</p>
+                    <div class="p-4 rounded-lg" style="background:#f4f4f5; border:1px solid #e5e5e5;">
+                      <p class="text-xs font-semibold uppercase tracking-wider mb-1" style="color:#a3a3a3;">論理構成力</p>
                       <div class="flex items-end gap-1.5">
-                        <p id="stat-skill-logic" class="text-xl font-bold" style="color:#1a1a1a;">0</p>
-                        <span class="text-xs mb-0.5" style="color:#9a9a9a;">/100</span>
+                        <p id="stat-skill-logic" class="text-xl font-bold" style="color:#1e1e1e;">0</p>
+                        <span class="text-xs mb-0.5" style="color:#a3a3a3;">/100</span>
                       </div>
-                      <div class="w-full h-1 mt-2 rounded-full overflow-hidden" style="background:#e0dcd5;">
+                      <div class="w-full h-1 mt-2 rounded-full overflow-hidden" style="background:#e5e5e5;">
                         <div id="stat-skill-logic-bar" class="h-full rounded-full" style="width:0%; background:#1a1a1a;"></div>
                       </div>
                     </div>
-                    <div class="p-4 rounded-lg" style="background:#f5f2ed; border:1px solid #e0dcd5;">
-                      <p class="text-xs font-semibold uppercase tracking-wider mb-1" style="color:#9a9a9a;">内容具体性</p>
+                    <div class="p-4 rounded-lg" style="background:#f4f4f5; border:1px solid #e5e5e5;">
+                      <p class="text-xs font-semibold uppercase tracking-wider mb-1" style="color:#a3a3a3;">内容具体性</p>
                       <div class="flex items-end gap-1.5">
-                        <p id="stat-skill-specificity" class="text-xl font-bold" style="color:#1a1a1a;">0</p>
-                        <span class="text-xs mb-0.5" style="color:#9a9a9a;">/100</span>
+                        <p id="stat-skill-specificity" class="text-xl font-bold" style="color:#1e1e1e;">0</p>
+                        <span class="text-xs mb-0.5" style="color:#a3a3a3;">/100</span>
                       </div>
-                      <div class="w-full h-1 mt-2 rounded-full overflow-hidden" style="background:#e0dcd5;">
+                      <div class="w-full h-1 mt-2 rounded-full overflow-hidden" style="background:#e5e5e5;">
                         <div id="stat-skill-specificity-bar" class="h-full rounded-full" style="width:0%; background:#c85a3a;"></div>
                       </div>
                     </div>
-                    <div class="p-4 rounded-lg" style="background:#f5f2ed; border:1px solid #e0dcd5;">
-                      <p class="text-xs font-semibold uppercase tracking-wider mb-1" style="color:#9a9a9a;">表現力</p>
+                    <div class="p-4 rounded-lg" style="background:#f4f4f5; border:1px solid #e5e5e5;">
+                      <p class="text-xs font-semibold uppercase tracking-wider mb-1" style="color:#a3a3a3;">表現力</p>
                       <div class="flex items-end gap-1.5">
-                        <p id="stat-skill-expression" class="text-xl font-bold" style="color:#1a1a1a;">0</p>
-                        <span class="text-xs mb-0.5" style="color:#9a9a9a;">/100</span>
+                        <p id="stat-skill-expression" class="text-xl font-bold" style="color:#1e1e1e;">0</p>
+                        <span class="text-xs mb-0.5" style="color:#a3a3a3;">/100</span>
                       </div>
-                      <div class="w-full h-1 mt-2 rounded-full overflow-hidden" style="background:#e0dcd5;">
+                      <div class="w-full h-1 mt-2 rounded-full overflow-hidden" style="background:#e5e5e5;">
                         <div id="stat-skill-expression-bar" class="h-full rounded-full" style="width:0%; background:#3a7d5c;"></div>
                       </div>
                     </div>
-                    <div class="p-4 rounded-lg" style="background:#f5f2ed; border:1px solid #e0dcd5;">
-                      <p class="text-xs font-semibold uppercase tracking-wider mb-1" style="color:#9a9a9a;">積極性・意欲</p>
+                    <div class="p-4 rounded-lg" style="background:#f4f4f5; border:1px solid #e5e5e5;">
+                      <p class="text-xs font-semibold uppercase tracking-wider mb-1" style="color:#a3a3a3;">積極性・意欲</p>
                       <div class="flex items-end gap-1.5">
-                        <p id="stat-skill-proactive" class="text-xl font-bold" style="color:#1a1a1a;">0</p>
-                        <span class="text-xs mb-0.5" style="color:#9a9a9a;">/100</span>
+                        <p id="stat-skill-proactive" class="text-xl font-bold" style="color:#1e1e1e;">0</p>
+                        <span class="text-xs mb-0.5" style="color:#a3a3a3;">/100</span>
                       </div>
-                      <div class="w-full h-1 mt-2 rounded-full overflow-hidden" style="background:#e0dcd5;">
+                      <div class="w-full h-1 mt-2 rounded-full overflow-hidden" style="background:#e5e5e5;">
                         <div id="stat-skill-proactive-bar" class="h-full rounded-full" style="width:0%; background:#1a1a1a;"></div>
                       </div>
                     </div>
-                    <div class="col-span-2 p-4 rounded-lg" style="background:#f5f2ed; border:1px solid #e0dcd5;">
-                      <p class="text-xs font-semibold uppercase tracking-wider mb-1" style="color:#9a9a9a;">自己理解度</p>
+                    <div class="col-span-2 p-4 rounded-lg" style="background:#f4f4f5; border:1px solid #e5e5e5;">
+                      <p class="text-xs font-semibold uppercase tracking-wider mb-1" style="color:#a3a3a3;">自己理解度</p>
                       <div class="flex items-end gap-1.5">
-                        <p id="stat-skill-selfaware" class="text-xl font-bold" style="color:#1a1a1a;">0</p>
-                        <span class="text-xs mb-0.5" style="color:#9a9a9a;">/100</span>
+                        <p id="stat-skill-selfaware" class="text-xl font-bold" style="color:#1e1e1e;">0</p>
+                        <span class="text-xs mb-0.5" style="color:#a3a3a3;">/100</span>
                       </div>
-                      <div class="w-full h-1 mt-2 rounded-full overflow-hidden" style="background:#e0dcd5;">
+                      <div class="w-full h-1 mt-2 rounded-full overflow-hidden" style="background:#e5e5e5;">
                         <div id="stat-skill-selfaware-bar" class="h-full rounded-full" style="width:0%; background:#c85a3a;"></div>
                       </div>
                     </div>
@@ -314,9 +314,9 @@
 
               <!-- Recent History -->
               <div class="glass-card p-6">
-                <h3 class="text-base font-bold mb-4" style="color:#1a1a1a;">最近の面接</h3>
+                <h3 class="text-base font-bold mb-4" style="color:#1e1e1e;">最近の面接</h3>
                 <ul id="recent-history-list" class="space-y-3">
-                  <li class="text-sm" style="color:#9a9a9a;">履歴を読み込んでいます...</li>
+                  <li class="text-sm" style="color:#a3a3a3;">履歴を読み込んでいます...</li>
                 </ul>
               </div>
             </div>
@@ -327,9 +327,9 @@
             <div class="space-y-6">
 
               <!-- Setup Header -->
-              <div class="p-8 rounded-xl" style="background:#1a1a1a;">
-                <h2 class="text-2xl sm:text-3xl font-bold" style="color:#f5f2ed; letter-spacing:-0.025em;">面接設定</h2>
-                <p class="mt-2 text-sm" style="color:#8a8680;">
+              <div class="p-8 rounded-xl" style="background:#ffffff; border:1px solid #e5e5e5;">
+                <h2 class="text-2xl sm:text-3xl font-bold" style="color:#1e1e1e; letter-spacing:-0.02em;">面接設定</h2>
+                <p class="mt-2 text-sm" style="color:#a3a3a3;">
                   シミュレーション条件を設定して、セッションを開始します。
                 </p>
               </div>
@@ -338,39 +338,39 @@
               <form id="setup-form" class="glass-card p-6 sm:p-8 space-y-7">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label for="interview-type" class="flex items-center text-sm font-semibold mb-2" style="color:#1a1a1a;">
-                      <i class="w-4 h-4 mr-2" data-lucide="message-square" style="color:#c85a3a;"></i>
+                    <label for="interview-type" class="flex items-center text-sm font-semibold mb-2" style="color:#1e1e1e;">
+                      <i class="w-4 h-4 mr-2" data-lucide="message-square" style="color:#e06438;"></i>
                       面接フェーズ
                     </label>
                     <input id="interview-type" name="interviewType" type="text" placeholder="例: 一次面接" required
                       class="input-field" />
-                    <p class="text-xs mt-1.5" style="color:#9a9a9a;">面接の段階を入力（例: 最終面接、カジュアル面談）</p>
+                    <p class="text-xs mt-1.5" style="color:#a3a3a3;">面接の段階を入力（例: 最終面接、カジュアル面談）</p>
                   </div>
 
                   <div>
-                    <label for="target-industry" class="flex items-center text-sm font-semibold mb-2" style="color:#1a1a1a;">
-                      <i class="w-4 h-4 mr-2" data-lucide="briefcase" style="color:#c85a3a;"></i>
+                    <label for="target-industry" class="flex items-center text-sm font-semibold mb-2" style="color:#1e1e1e;">
+                      <i class="w-4 h-4 mr-2" data-lucide="briefcase" style="color:#e06438;"></i>
                       志望業界・職種
                     </label>
                     <input id="target-industry" name="targetIndustry" type="text" placeholder="例: IT, エンジニア" required
                       class="input-field" />
-                    <p class="text-xs mt-1.5" style="color:#9a9a9a;">ターゲットとする業界と職種を入力</p>
+                    <p class="text-xs mt-1.5" style="color:#a3a3a3;">ターゲットとする業界と職種を入力</p>
                   </div>
                 </div>
 
                 <div>
-                  <label for="motivation-and-self-pr" class="flex items-center text-sm font-semibold mb-2" style="color:#1a1a1a;">
-                    <i class="w-4 h-4 mr-2" data-lucide="file-text" style="color:#c85a3a;"></i>
+                  <label for="motivation-and-self-pr" class="flex items-center text-sm font-semibold mb-2" style="color:#1e1e1e;">
+                    <i class="w-4 h-4 mr-2" data-lucide="file-text" style="color:#e06438;"></i>
                     志望動機・自己PR (任意)
                   </label>
                   <textarea id="motivation-and-self-pr" name="motivationAndSelfPr" rows="4"
                     placeholder="例: この業界を志望する理由は..." class="input-field"></textarea>
-                  <p class="text-xs mt-1.5" style="color:#9a9a9a;">この内容を踏まえて質問が行われます。</p>
+                  <p class="text-xs mt-1.5" style="color:#a3a3a3;">この内容を踏まえて質問が行われます。</p>
                 </div>
 
                 <div>
-                  <label class="flex items-center text-sm font-semibold mb-4" style="color:#1a1a1a;">
-                    <i class="w-4 h-4 mr-2" data-lucide="settings-2" style="color:#5c5c5c;"></i>
+                  <label class="flex items-center text-sm font-semibold mb-4" style="color:#1e1e1e;">
+                    <i class="w-4 h-4 mr-2" data-lucide="settings-2" style="color:#6b6b6b;"></i>
                     モード選択
                   </label>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -378,7 +378,7 @@
                       <input type="radio" name="mode" value="training" checked>
                       <div class="mode-card">
                         <div class="mode-card-content">
-                          <div class="mode-icon" style="background:rgba(200,90,58,0.08); color:#c85a3a;">
+                          <div class="mode-icon" style="background:rgba(224,100,56,0.08); color:#c85a3a;">
                             <i class="w-5 h-5" data-lucide="sparkles"></i>
                           </div>
                           <div class="mode-info">
@@ -408,19 +408,19 @@
                   </div>
                 </div>
 
-                <div class="p-3.5 rounded-lg flex items-start gap-3" style="background:rgba(200,90,58,0.05); border:1px solid rgba(200,90,58,0.12);">
-                  <i data-lucide="info" class="w-4 h-4 mt-0.5 flex-shrink-0" style="color:#c85a3a;"></i>
-                  <p id="current-setting-summary" class="text-sm" style="color:#5c5c5c;">現在の設定: 訓練モード (毎回フィードバック)</p>
+                <div class="p-3.5 rounded-lg flex items-start gap-3" style="background:rgba(224,100,56,0.05); border:1px solid rgba(224,100,56,0.12);">
+                  <i data-lucide="info" class="w-4 h-4 mt-0.5 flex-shrink-0" style="color:#e06438;"></i>
+                  <p id="current-setting-summary" class="text-sm" style="color:#6b6b6b;">現在の設定: 訓練モード (毎回フィードバック)</p>
                 </div>
 
-                <div class="training-action-buttons pt-4" style="border-top:1px solid #e0dcd5;">
+                <div class="training-action-buttons pt-4" style="border-top:1px solid #e5e5e5;">
                   <button type="submit" class="primary-button training-start-button">
                     <i class="w-4 h-4 mr-2" data-lucide="play"></i>
                     面接を開始する
                   </button>
                   <div id="training-status-message" class="training-status-message hidden mt-3">
                     <span class="training-status-dot" aria-hidden="true"></span>
-                    <span id="training-status-text" class="text-sm" style="color:#5c5c5c;"></span>
+                    <span id="training-status-text" class="text-sm" style="color:#6b6b6b;"></span>
                   </div>
                 </div>
               </form>
@@ -444,34 +444,34 @@
                   <input id="profile-avatar" type="file" accept="image/*" class="sr-only" />
 
                   <div>
-                    <p id="profile-name-display" class="text-xl font-bold" style="color:#1a1a1a;">名前未設定</p>
-                    <p id="profile-role-display" class="text-sm mt-0.5" style="color:#9a9a9a;">未設定</p>
+                    <p id="profile-name-display" class="text-xl font-bold" style="color:#1e1e1e;">名前未設定</p>
+                    <p id="profile-role-display" class="text-sm mt-0.5" style="color:#a3a3a3;">未設定</p>
                   </div>
 
                   <span id="profile-status-display"
                     class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold"
-                    style="background:rgba(200,90,58,0.08); color:#c85a3a; border:1px solid rgba(200,90,58,0.15);">
+                    style="background:rgba(224,100,56,0.08); color:#c85a3a; border:1px solid rgba(224,100,56,0.15);">
                     書類選考
                   </span>
                 </div>
 
                 <div class="flex-1 space-y-4">
-                  <div class="rounded-lg p-5" style="background:#f5f2ed; border:1px solid #e0dcd5;">
+                  <div class="rounded-lg p-5" style="background:#f4f4f5; border:1px solid #e5e5e5;">
                     <h3 class="text-xs font-semibold uppercase tracking-wider mb-2" style="color:#9a9a9a; letter-spacing:0.08em;">現在のステータス</h3>
-                    <p id="profile-status-description" class="text-sm leading-relaxed" style="color:#1a1a1a;">応募状況を設定してください。</p>
+                    <p id="profile-status-description" class="text-sm leading-relaxed" style="color:#1e1e1e;">応募状況を設定してください。</p>
                   </div>
 
-                  <div class="rounded-lg p-5" style="background:#f5f2ed; border:1px solid #e0dcd5;">
+                  <div class="rounded-lg p-5" style="background:#f4f4f5; border:1px solid #e5e5e5;">
                     <h3 class="text-xs font-semibold uppercase tracking-wider mb-2" style="color:#9a9a9a; letter-spacing:0.08em;">自己紹介メモ</h3>
-                    <p id="profile-notes-display" class="text-sm leading-relaxed whitespace-pre-wrap" style="color:#1a1a1a;">
+                    <p id="profile-notes-display" class="text-sm leading-relaxed whitespace-pre-wrap" style="color:#1e1e1e;">
                       まだメモはありません。
                     </p>
                   </div>
                 </div>
               </div>
 
-              <form id="profile-form" class="space-y-5 pt-6" style="border-top:1px solid #e0dcd5;">
-                <h3 class="text-base font-bold" style="color:#1a1a1a;">プロフィール編集</h3>
+              <form id="profile-form" class="space-y-5 pt-6" style="border-top:1px solid #e5e5e5;">
+                <h3 class="text-base font-bold" style="color:#1e1e1e;">プロフィール編集</h3>
                 <div class="grid gap-5 sm:grid-cols-2">
                   <div>
                     <label for="profile-name" class="block text-xs font-semibold uppercase tracking-wider mb-2"
@@ -520,8 +520,8 @@
             <div class="space-y-5">
               <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <h2 class="text-xl font-bold" style="color:#1a1a1a;">面接履歴</h2>
-                  <p class="text-sm mt-0.5" style="color:#9a9a9a;">過去のトレーニング記録一覧</p>
+                  <h2 class="text-xl font-bold" style="color:#1e1e1e;">面接履歴</h2>
+                  <p class="text-sm mt-0.5" style="color:#a3a3a3;">過去のトレーニング記録一覧</p>
                 </div>
                 <button id="clear-history-btn-hist" class="secondary-danger-button">
                   <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
@@ -530,7 +530,7 @@
               </div>
 
               <div class="glass-card p-3.5 flex items-center gap-3 overflow-x-auto">
-                <div class="flex items-center gap-1.5 text-xs font-semibold whitespace-nowrap" style="color:#5c5c5c;">
+                <div class="flex items-center gap-1.5 text-xs font-semibold whitespace-nowrap" style="color:#6b6b6b;">
                   <i data-lucide="filter" class="w-3.5 h-3.5"></i>
                   フィルター:
                 </div>
@@ -543,7 +543,7 @@
               </div>
 
               <ul id="history-list-hist" class="space-y-3">
-                <li class="text-sm text-center py-8" style="color:#9a9a9a;">履歴を読み込んでいます...</li>
+                <li class="text-sm text-center py-8" style="color:#a3a3a3;">履歴を読み込んでいます...</li>
               </ul>
             </div>
           </section>
@@ -551,13 +551,13 @@
           <!-- ── Interview Chat View ── -->
           <section id="interview-chat-view" class="content-view">
             <div class="glass-card p-4 sm:p-5 flex flex-col h-[calc(100vh-140px)] min-h-[600px]">
-              <div class="flex items-center justify-between mb-3 pb-3" style="border-bottom:1px solid #e0dcd5;">
+              <div class="flex items-center justify-between mb-3 pb-3" style="border-bottom:1px solid #e5e5e5;">
                 <div>
-                  <h2 class="text-base font-bold flex items-center gap-2" style="color:#1a1a1a;">
+                  <h2 class="text-base font-bold flex items-center gap-2" style="color:#1e1e1e;">
                     <span class="w-2 h-2 rounded-full animate-pulse" style="background:#3a7d5c;"></span>
                     面接セッション
                   </h2>
-                  <p id="mode-indicator" class="text-xs mt-0.5 font-medium" style="color:#c85a3a;"></p>
+                  <p id="mode-indicator" class="text-xs mt-0.5 font-medium" style="color:#e06438;"></p>
                 </div>
                 <button id="end-interview-btn"
                   class="secondary-button text-xs py-1.5 px-3" style="color:#c0392b; border-color:#f0d0cc;">
@@ -567,12 +567,12 @@
 
               <div id="chat-history" class="chat-history flex-1 space-y-4 mb-3 pr-1">
                 <div class="flex flex-col items-center justify-center h-full space-y-3" style="opacity:0.5;">
-                  <i data-lucide="message-square" class="w-10 h-10" style="color:#9a9a9a;"></i>
-                  <p class="text-sm" style="color:#9a9a9a;">面接を開始すると、ここにチャットが表示されます。</p>
+                  <i data-lucide="message-square" class="w-10 h-10" style="color:#a3a3a3;"></i>
+                  <p class="text-sm" style="color:#a3a3a3;">面接を開始すると、ここにチャットが表示されます。</p>
                 </div>
               </div>
 
-              <div class="mt-auto pt-3" style="border-top:1px solid #e0dcd5;">
+              <div class="mt-auto pt-3" style="border-top:1px solid #e5e5e5;">
                 <div class="flex flex-col gap-2.5">
                   <div id="listening-indicator"
                     class="hidden flex items-center gap-2 text-sm justify-center py-1" style="color:#c0392b;">
@@ -590,7 +590,7 @@
                         class="input-field pr-12 py-3 min-h-[3rem] max-h-32 resize-none" placeholder="回答を入力..."
                         autocomplete="off"></textarea>
                       <button id="send-button"
-                        class="absolute right-2 bottom-1.5 p-1.5 transition-colors" style="color:#c85a3a;">
+                        class="absolute right-2 bottom-1.5 p-1.5 transition-colors" style="color:#e06438;">
                         <i data-lucide="send" class="w-5 h-5"></i>
                       </button>
                     </div>
@@ -605,25 +605,25 @@
         <div id="menu-overlay" class="fixed inset-0 hidden z-40 transition-opacity" style="background:rgba(0,0,0,0.4);"></div>
         <aside id="menu-panel"
           class="fixed top-0 right-0 h-full w-72 transform translate-x-full transition-transform duration-300 ease-in-out z-50 p-6 space-y-6"
-          style="background:#ffffff; border-left:1px solid #e0dcd5; box-shadow:-4px 0 24px rgba(0,0,0,0.08);">
+          style="background:#ffffff; border-left:1px solid #e5e5e5; box-shadow:-4px 0 24px rgba(0,0,0,0.08);">
           <div class="flex items-center justify-between">
-            <h3 class="text-base font-bold" style="color:#1a1a1a;">メニュー</h3>
-            <button id="close-menu-btn" class="transition-colors" style="color:#9a9a9a;">
+            <h3 class="text-base font-bold" style="color:#1e1e1e;">メニュー</h3>
+            <button id="close-menu-btn" class="transition-colors" style="color:#a3a3a3;">
               <i data-lucide="x" class="w-5 h-5"></i>
             </button>
           </div>
           <div class="space-y-1">
             <button id="user-profile-info-btn"
               class="w-full text-left text-sm font-medium rounded-lg px-4 py-3 transition flex items-center gap-3"
-              style="color:#1a1a1a; hover:background:#f5f2ed;">
-              <i data-lucide="user" class="w-4 h-4" style="color:#5c5c5c;"></i> プロフィール
+              style="color:#1a1a1a; hover:background:#f4f4f5;">
+              <i data-lucide="user" class="w-4 h-4" style="color:#6b6b6b;"></i> プロフィール
             </button>
             <button id="settings-btn"
               class="w-full text-left text-sm font-medium rounded-lg px-4 py-3 transition flex items-center gap-3"
-              style="color:#1a1a1a;">
-              <i data-lucide="settings" class="w-4 h-4" style="color:#5c5c5c;"></i> 設定
+              style="color:#1e1e1e;">
+              <i data-lucide="settings" class="w-4 h-4" style="color:#6b6b6b;"></i> 設定
             </button>
-            <div class="my-2" style="border-bottom:1px solid #e0dcd5;"></div>
+            <div class="my-2" style="border-bottom:1px solid #e5e5e5;"></div>
             <button id="logout-btn-menu"
               class="w-full text-left text-sm font-medium rounded-lg px-4 py-3 transition flex items-center gap-3"
               style="color:#c0392b;">
