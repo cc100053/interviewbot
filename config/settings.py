@@ -33,6 +33,7 @@ class Settings(BaseSettings):
 
     gemini_api_keys: Optional[str] = Field(None, env="GEMINI_API_KEYS")
     gemini_api_key: Optional[str] = Field(None, env="GEMINI_API_KEY")
+    gemini_ultimate_key: Optional[str] = Field(None, env="GEMINI_ULTIMATE_KEY")
     gemini_model_name: str = Field("models/gemini-3-flash-preview", env="GEMINI_MODEL_NAME")
 
     class Config:

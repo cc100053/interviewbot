@@ -253,8 +253,7 @@ async def start_interview(
     ai_service: AIService = Depends(get_ai_service),
 ) -> InterviewStartResponse:
     """Start a new interview session for the current user."""
-    # Rotate to the next Gemini API key for load balancing
-    ai_service.rotate_gemini_key()
+    # Key rotation is now handled automatically per-request via _call_gemini()
 
     setup_payload = request.dict(by_alias=True)
     setup_payload.pop("mode", None)

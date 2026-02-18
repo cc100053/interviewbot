@@ -125,22 +125,58 @@ class AIService:
         }
 
     def rotate_gemini_key(self) -> None:
-        """Rotate to the next Gemini API key (round-robin).
+        """Legacy no-op — rotation is now automatic per-request via _call_gemini()."""
+        pass
 
-        Call this method at the start of each new interview to distribute
-        API usage across multiple keys.
+    def _call_gemini(self, prompt: str) -> str:
+        """Call Gemini with automatic key rotation and retry on failure.
+
+        Rotates to the next API key before each attempt.  If the call fails
+        (rate-limit, network error, etc.), tries the remaining keys in
+        round-robin order.  Raises the last exception when all keys are
+        exhausted.
         """
-        if not self.use_gemini or not self.key_manager or self.key_manager.key_count <= 1:
-            return
+        if not self.use_gemini or not self.key_manager:
+            raise RuntimeError("Gemini is not configured")
 
-        next_key = self.key_manager.get_next_key()
-        if next_key:
+        candidates = self.key_manager.get_keys_cycle_from_next()
+        if not candidates:
+            raise RuntimeError("No Gemini API keys available")
+
+        model_name = self.settings.gemini_model_name or "models/gemini-3-flash-preview"
+        last_exc: Exception | None = None
+
+        for idx, key in candidates:
             try:
-                genai.configure(api_key=next_key)
-                model_name = self.settings.gemini_model_name or "models/gemini-1.5-flash-latest"
+                genai.configure(api_key=key)
                 self.generative_model = genai.GenerativeModel(model_name)
-            except Exception as exc:  # pragma: no cover - defensive
-                logger.warning("Failed to rotate Gemini key: %s", exc)
+                response = self.generative_model.generate_content(prompt)
+                # Persist the successful key index for next rotation start
+                self.key_manager.set_index(idx)
+                return self._extract_plain_text(response)
+            except Exception as exc:
+                last_exc = exc
+                logger.warning(
+                    "Gemini call failed with key index %d: %s — trying next key",
+                    idx, exc,
+                )
+
+        # All regular keys exhausted — try ultimate key as last resort
+        ultimate_key = self.settings.gemini_ultimate_key
+        if ultimate_key and ultimate_key.strip():
+            try:
+                logger.warning("All regular keys exhausted — trying ultimate key")
+                genai.configure(api_key=ultimate_key.strip())
+                self.generative_model = genai.GenerativeModel(model_name)
+                response = self.generative_model.generate_content(prompt)
+                # Do NOT update key_manager index — ultimate key stays outside rotation
+                return self._extract_plain_text(response)
+            except Exception as exc:
+                logger.error("Ultimate key also failed: %s", exc)
+                last_exc = exc
+
+        logger.error("All %d Gemini API keys (+ ultimate) exhausted", len(candidates))
+        raise last_exc  # type: ignore[misc]
 
     def generate_initial_question(self, setup: dict) -> dict:
         question_text = self._generate_question_text(setup)
@@ -276,10 +312,9 @@ class AIService:
 
         raw_response = ""
         try:
-            response = self.generative_model.generate_content(
+            raw_response = self._call_gemini(
                 f"{summary_instruction}\n\n=== 面接記録 ===\n{conversation}\n=== 記録ここまで ==="
             )
-            raw_response = self._extract_plain_text(response)
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("Gemini summary generation request failed: %s", exc)
             return default_summary("面接のサマリーを生成できませんでした。")
@@ -427,10 +462,9 @@ class AIService:
             '必ず次のJSON形式で回答してください: {"next_question": "質問文"}'
         )
         try:
-            response = self.generative_model.generate_content(
+            text = self._call_gemini(
                 f"{prompt}\n\nこれまでの会話:\n{history_text}"
             )
-            text = self._extract_plain_text(response)
             data = self._extract_json_object(text)
             if data:
                 next_question = data.get("next_question") or data.get("nextQuestion")
@@ -521,8 +555,7 @@ When analyzing the user's latest response (provided in the prompt context, along
             if history_text:
                 prompt += f"\n\nこれまでの会話:\n{history_text}"
             prompt += f"\n\n候補者の最新回答:\n{transcript}"
-            response = self.generative_model.generate_content(prompt)
-            text = self._extract_plain_text(response)
+            text = self._call_gemini(prompt)
             data = self._extract_json_object(text)
             if data:
                 feedback = data.get("feedback") or "良い回答でした。"
